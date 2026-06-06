@@ -1,0 +1,12 @@
+.little_wider{
+    min-width: 60px;
+}
+.wide{
+    min-width:160px;
+}
+.wider{
+    min-width:190px;
+}
+.grey{
+    color: rgba(13, 18, 70, 0.616);
+}

@@ -1,0 +1,29 @@
+# Template images & vendor (space saving)
+assets/img/
+assets/vendor/
+assets/scss/
+NiceAdmin/assets/img/
+NiceAdmin/assets/vendor/
+NiceAdmin/assets/scss/
+
+# Template vendor CSS/JS (not custom)
+assets/js/main.js
+NiceAdmin/assets/js/main.js
+NiceAdmin/assets/css/style.css
+
+# OS files
+Thumbs.db
+.DS_Store
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Screenshots
+Screens/
+
+# Logs
+*.log
