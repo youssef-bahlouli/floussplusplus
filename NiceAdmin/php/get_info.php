@@ -24,26 +24,24 @@
             'epargne' => (float)$epargne
         ]);
     }
-    function get_budget_2nd_last_record(){
+    function get_budget_2nd_last_record($username){
         $db = get_con_var();
-        $cursor = $db->budgets->find(
-            [],
-            ['sort' => ['_id' => -1], 'skip' => 1, 'limit' => 1]
+        return $db->budgets->findOne(
+            ['username' => $username],
+            ['sort' => ['_id' => -1], 'skip' => 1]
         );
-        $arr = iterator_to_array($cursor);
-        return !empty($arr) ? current($arr) : null;
     }
     function get_depenses($username){
         $db = get_con_var();
         return $db->depenses->findOne(
-            [],
+            ['username' => $username],
             ['sort' => ['_id' => -1]]
         );
     }
     function get_depenses_latest($username){
         $db = get_con_var();
         return $db->depenses->findOne(
-            [],
+            ['username' => $username],
             ['sort' => ['_id' => -1]]
         );
     }

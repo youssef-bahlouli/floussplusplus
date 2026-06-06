@@ -2,6 +2,7 @@
   require './php/input.php';
 
   session_start();
+  if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
 
 ?>
@@ -382,24 +383,18 @@
   
                 <!-- General Form Elements -->
                 <?php
+                    if(!isset($_POST['salaire'])){ header('Location: b_salsaire_input.php'); exit; }
                     $salaire=$_POST['salaire'];
-                    $condition=$_POST['condition'];
+                    $condition=$_POST['condition'] ?? 'no';
                     
-                    // As-tu dépensé une partie de cela ? 
-                    // means 
-                    //yes -> rest=post.rest
-                    // no -> rest=post.salaire
                     if($condition == 'yes'){
-                      $reste=$_POST['reste'];
+                      $reste=$_POST['reste'] ?? $salaire;
                       input_salaire($username,$salaire,$reste,$condition);
-
-
                     }else {
-
                       input_salaire($username,$salaire,$salaire,$condition);
-
-
                     }
+                    header('Location: dashboard.php');
+                    exit;
 
                     ?>
                     

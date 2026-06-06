@@ -1,5 +1,6 @@
 <?php
   session_start();
+  if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
   require 'php/get_tables.php';
   require 'php/get_info.php';
@@ -414,13 +415,14 @@
                       <h6>
                         <?php
                         $budget=get_budget($username);
-                        echo $budget['rest_du_cheque_final']." MAD";     
+                        echo ($budget ? $budget['rest_du_cheque_final'] : 0)." MAD";     
                         ?>
                       </h6>
                       <span class="text-success small pt-1 fw-bold">
                         <?php
-                        $l=get_budget($username);
-                         echo number_format(( $l['rest_du_cheque_final']/$l['salaire'] )*100,2);?>%
+                        $l=$budget;
+                        $pct = ($l && $l['salaire'] > 0) ? number_format(($l['rest_du_cheque_final']/$l['salaire'])*100, 2) : 0;
+                        echo $pct;?>%
                       </span> 
                       <span class="text-muted small pt-2 ps-1">de salaire</span>
 
@@ -458,7 +460,7 @@
                     <div class="ps-3">
                       <h6>
                         <?php
-                        echo $l['epargne']." MAD";
+                        echo ($l ? $l['epargne'] : 0)." MAD";
                         ?>
 
                       </h6>
@@ -499,7 +501,7 @@
                     <div class="ps-3">
                       <h6>
                       <?php
-                        echo $l['rest_du_cheque_final']+$l['epargne']." MAD";
+                        echo ($l ? $l['rest_du_cheque_final']+$l['epargne'] : 0)." MAD";
                         ?>
 
                       </h6>

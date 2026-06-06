@@ -3,6 +3,7 @@
   require "./php/set_info.php";
   $connexion=get_con_var();
   session_start();
+  if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
 
   ?>
@@ -371,25 +372,13 @@
               <div class="card-body" >
                 <h5 class="card-title">Tous est complète</h5>
                 <?php
+                  if(!isset($_POST['salaire'],$_POST['reste'],$_POST['epargne'])){ header('Location: budget_input.php'); exit; }
                   $salaire=$_POST['salaire'];
                   $reste=$_POST['reste'];
                   $epargne=$_POST['epargne'];
-                  $b=get_budget($username);
-                  /*
-                  echo $b['salaire']."<br>";
-                  echo $b['rest_du_cheque_final']."<br>";
-                  echo $b['epargne']."<br>";
-                  */
                   set_budget($connexion,$salaire,$reste,$epargne,$username);
-                  //echo "result <br>";
-                  $b=get_budget($username);
-                  /*
-                  echo $b['salaire']."<br>";
-                  echo $b['rest_du_cheque_final']."<br>";
-                  echo $b['epargne']."<br>";
-                  */
-
-                ?>
+                  header('Location: dashboard.php');
+                  exit;
   
               </div>
 

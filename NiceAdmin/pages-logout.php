@@ -1,6 +1,9 @@
 <?php
   session_start();
-  $_SESSION['$username'] = $_REQUEST['username'].'';
+  $_SESSION = [];
+  session_destroy();
+  header('Location: pages-login.html');
+  exit;
 ?>
 <!DOCTYPE html>
 <html lang="en">

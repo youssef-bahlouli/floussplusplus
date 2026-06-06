@@ -1,5 +1,6 @@
 <?php
   session_start();
+  if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
 
 ?>
@@ -385,21 +386,13 @@
   
                 <!-- General Form Elements -->
                 <?php
-
+                if(!isset($_POST['epargne'])){ header('Location: b_epargne_input.php'); exit; }
                 require './php/input.php';
-                //echo $_POST['reponse']." ";
-                //echo $_POST['epargne'];
-                $reponse=$_POST['reponse'];
+                $reponse=$_POST['reponse'] ?? 'no';
                 $epargne=$_POST['epargne'];
                 input_epargne($username,$epargne,$reponse);
-
-                /*
-                    $salaire=$_POST['salaire'];
-                    $reste=$_POST['reste'];
-                    $condition=$_POST['condition'];
-                    input_salaire($salaire,$reste,$condition);
-                */    
-                ?>
+                header('Location: dashboard.php');
+                exit;
               
 
                 

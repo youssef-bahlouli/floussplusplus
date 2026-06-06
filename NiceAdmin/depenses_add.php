@@ -1,5 +1,6 @@
 <?php
   session_start();
+  if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
   require 'php/get_info.php';
   require 'php/analyse.php';
@@ -406,7 +407,7 @@
                         <div class="col-sm-10">
                           <select class="form-select" aria-label="Default select example"
                           onchange="checkSelect()" id="depenses_type-id" name="type">
-                            <option selected>3 types</option>
+                            <option selected disabled value="">Select a type</option>
                             <option value="produits">Produits</option>
                             <option value="taxes">Taxes</option>
                             <option value="services">Services</option>

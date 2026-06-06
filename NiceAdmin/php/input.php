@@ -14,17 +14,23 @@
         }else{
             $reste-=$total;
         }
-        insert_budget($dbconn,$username,$salaire,$reste,$epargne);
-        $l=get_budget_seperate($username,$salaire,$reste,$epargne);
-        $budget_id = $l['_id'];
-        $date= new DateTime();
-        $ddate=$date->format("Y-m-d H:i:s");
-        insert_depenses($dbconn,$username,$nom,$description,$type,$prix,$q,$ddate);
-        $dbconn->depenses->updateOne(
-            ['username' => $username],
-            ['$set' => ['budget_id' => $budget_id]],
-            ['sort' => ['_id' => -1]]
-        );
+        $budgetResult = $dbconn->budgets->insertOne([
+            'username' => $username,
+            'salaire' => (float)$salaire,
+            'rest_du_cheque_final' => (float)$reste,
+            'epargne' => (float)$epargne,
+            'created_at' => new MongoDB\BSON\UTCDateTime()
+        ]);
+        $dbconn->depenses->insertOne([
+            'username' => $username,
+            'nom' => $nom,
+            'description' => $description,
+            'type' => $type,
+            'prix' => (float)$prix,
+            'quantite' => (int)$q,
+            'ddate' => (new DateTime())->format("Y-m-d H:i:s"),
+            'budget_id' => $budgetResult->getInsertedId()
+        ]);
     }
     function input_salaire($username,$salaire,$reste,$condition){
         require_once 'get_info.php';

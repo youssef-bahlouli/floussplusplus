@@ -2,6 +2,7 @@
   require './php/input.php';
 
   session_start();
+  if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
 
 ?>

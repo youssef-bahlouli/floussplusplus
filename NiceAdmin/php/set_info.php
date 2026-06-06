@@ -9,14 +9,13 @@
         ]);
     }
     function set_budget($connexion,$salaire,$reste,$epargne,$username){
-        $connexion->budgets->updateMany(
-            ['username' => $username],
-            ['$set' => [
-                'salaire' => (float)$salaire,
-                'rest_du_cheque_final' => (float)$reste,
-                'epargne' => (float)$epargne
-            ]]
-        );
+        $connexion->budgets->insertOne([
+            'username' => $username,
+            'salaire' => (float)$salaire,
+            'rest_du_cheque_final' => (float)$reste,
+            'epargne' => (float)$epargne,
+            'created_at' => new MongoDB\BSON\UTCDateTime()
+        ]);
     }
     function insert_depenses($connexion,$username,$nom,$description,$type,$prix,$q,$ddate){
         $connexion->depenses->insertOne([
@@ -49,7 +48,7 @@
     function insert_users($connexion,$username,$first_name,$last_name,$age,$passwrd,$date_payment){
         $connexion->users->insertOne([
             '_id' => $username,
-            'passwrd' => $passwrd,
+            'passwrd' => password_hash($passwrd, PASSWORD_DEFAULT),
             'first_name' => $first_name,
             'last_name' => $last_name,
             'age' => (int)$age,
