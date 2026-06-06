@@ -1,50 +1,65 @@
 <?php
-    function insert_budget($connexion,$salaire,$reste,$epargne){   
-        pg_query($connexion,"
-        insert into budget(salaire,rest_du_cheque_final,epargne)
-        values ('$salaire','$reste','$epargne');
-        ");
-        //echo "result of insert".$reste." ".$epargne."<br>";
+    function insert_budget($connexion,$salaire,$reste,$epargne){
+        $connexion->budgets->insertOne([
+            'salaire' => (float)$salaire,
+            'rest_du_cheque_final' => (float)$reste,
+            'epargne' => (float)$epargne,
+            'created_at' => new MongoDB\BSON\UTCDateTime()
+        ]);
     }
-    function set_budget($connexion,$salaire,$reste,$epargne,$username){   
-        pg_query($connexion,"update budget set salaire='$salaire',
-                            rest_du_cheque_final='$reste' ,
-                            epargne='$epargne'
-                            ");
-        //echo "result of insert".$reste."".$epargne."";
+    function set_budget($connexion,$salaire,$reste,$epargne,$username){
+        $connexion->budgets->updateMany(
+            [],
+            ['$set' => [
+                'salaire' => (float)$salaire,
+                'rest_du_cheque_final' => (float)$reste,
+                'epargne' => (float)$epargne
+            ]]
+        );
     }
-    function insert_utilisation($connexion,$id_budget,$username){   
-        $requette="insert into utilisation(id_budget,username) values ('$id_budget','$username')";
-        //apply queries
-        pg_query($connexion,$requette);
+    function insert_depenses($connexion,$username,$nom,$description,$type,$prix,$q,$ddate){
+        $connexion->depenses->insertOne([
+            'username' => $username,
+            'nom' => $nom,
+            'description' => $description,
+            'type' => $type,
+            'prix' => (float)$prix,
+            'quantite' => (int)$q,
+            'ddate' => $ddate
+        ]);
     }
-    function insert_depenses($connexion,$username,$nom,$description,$type,$prix,$q,$ddate){   
-        $res=pg_query($connexion,
-        "insert into depenses (nom,description,type,prix,quantite,ddate) 
-        values ('$nom','$description','$type','$prix','$q','$ddate')");
-    }
-    //setting data of automated transferring from budget.rest_du_cheque_final to 
     function set_bag($connexion,$username,$value,$jour){
-        $res=pg_query($connexion,"update bag set value='$value' , jour='$jour' where username='$username'");
+        $connexion->bag->updateOne(
+            ['username' => $username],
+            ['$set' => ['value' => (float)$value, 'jour' => $jour]]
+        );
     }
     function set_users($connexion,$username,$first_name,$last_name,$age,$passwrd,$date_payment){
-        $res=pg_query($connexion,"update users set 
-         first_name='$first_name', last_name='$last_name', 
-        age='$age', date_payment='$date_payment'
-        where username='$username'");
+        $connexion->users->updateOne(
+            ['_id' => $username],
+            ['$set' => [
+                'first_name' => $first_name,
+                'last_name' => $last_name,
+                'age' => (int)$age,
+                'date_payment' => $date_payment
+            ]]
+        );
     }
     function insert_users($connexion,$username,$first_name,$last_name,$age,$passwrd,$date_payment){
-        $sql="
-        insert into users(username,passwrd,first_name,last_name,age,date_payment) values
-	    ('$username','$passwrd','$first_name','$last_name','$age','$date_payment');
-        ";
-        pg_query($connexion,$sql);
-        
+        $connexion->users->insertOne([
+            '_id' => $username,
+            'passwrd' => $passwrd,
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'age' => (int)$age,
+            'date_payment' => $date_payment
+        ]);
     }
     function insert_bag($connexion,$username,$value,$jour){
-        pg_query($connexion,"
-        insert into bag(username,value,jour)
-        values ('$username','$value' ,'$jour' );
-        ");
+        $connexion->bag->insertOne([
+            'username' => $username,
+            'value' => (float)$value,
+            'jour' => $jour
+        ]);
     }
 ?>

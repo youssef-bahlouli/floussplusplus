@@ -10,7 +10,7 @@
     while (true) {
         $current = time();
         $formattedTime = date("H:i:s", $current);
-        pg_query($connexion,"insert into activity (content,moment) values('$text','$formattedTime')");
+        //pg_query($connexion,"insert into activity (content,moment) values('$text','$formattedTime')");
         sleep(3); // Sleep for 3 seconds
     }
 ?>

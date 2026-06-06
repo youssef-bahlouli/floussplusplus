@@ -407,18 +407,18 @@
                 </thead>
                 <tbody>
                 <?php
-                    while ($ligne = pg_fetch_object($listeemploye)){
+                    foreach($listeemploye as $ligne){
                         ?>
                         <tr>
                         <td class="little_wider">
-                        <?php echo $ligne->username; ?>
+                        <?php echo $ligne['username']; ?>
                         </td>
-                        <td class =" little_wider"> <?php echo $ligne->first_name ; ?></td>
-                        <td class =" little_wider"> <?php echo  $ligne->last_name; ?></td>
-                        <td class="wide"> <?php echo number_format($ligne->salaire             ,1)." MAD" ; ?> </td>
-                        <td class="wide"> <?php echo number_format($ligne->rest_du_cheque_final,1)." MAD" ; ?> </td>
-                        <td class="wide"> <?php echo number_format($ligne->epargne             ,1)." MAD" ; ?> </td>
-                        <td class="text-primary fw-bold wider"><?php echo number_format($ligne->budget,2)." MAD"; ?> </td>
+                        <td class =" little_wider"> <?php echo $ligne['first_name'] ; ?></td>
+                        <td class =" little_wider"> <?php echo  $ligne['last_name']; ?></td>
+                        <td class="wide"> <?php echo number_format($ligne['salaire']             ,1)." MAD" ; ?> </td>
+                        <td class="wide"> <?php echo number_format($ligne['rest_du_cheque_final'],1)." MAD" ; ?> </td>
+                        <td class="wide"> <?php echo number_format($ligne['epargne']             ,1)." MAD" ; ?> </td>
+                        <td class="text-primary fw-bold wider"><?php echo number_format($ligne['Budget'],2)." MAD"; ?> </td>
                         
                       </tr>
                         <?php

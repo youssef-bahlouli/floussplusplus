@@ -407,11 +407,11 @@
                 </thead>
                 <tbody>
                 <?php
-                    while ($ligne = pg_fetch_assoc($listeemploye)){
+                    foreach($listeemploye as $ligne){
                         ?>
                         <tr>
                         <td >
-                        <?php echo $ligne['id_depenses']; ?>
+                        <?php echo (string)$ligne['_id']; ?>
                         </td>
                         <td class ="text-primary fw-bold" >
                           <?php echo $ligne['nom']; ?>

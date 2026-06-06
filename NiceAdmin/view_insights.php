@@ -398,20 +398,12 @@
                 <br>
                 <?php 
                 $res=get_bag_table($connexion,$username);
-                //$a=pg_fetch_object($res);
-                //echo $a->value;
                 $analyse = new Analyse();
-                $num=0;
-                $class=1;
-                while($l = pg_fetch_assoc($res)){
-                    $num++;
-                }
-                  if ($num==0)echo $num." payments passé.";
-                $res=get_bag_table($connexion,$username);
-                
+                $num = count($res);
+                if ($num==0)echo $num." payments passé.";
                 ?>
               </div>
-              <?php while($class<=$num){ ?>
+              <?php if($num>0){ ?>
               <script>  
                 document.addEventListener("DOMContentLoaded", () => {
                   new ApexCharts(document.querySelector("#lineChart"), {
@@ -419,18 +411,13 @@
                       name: "le Montant reservé au moment de chaque payment",
                       data: [
                         <?php
-                          $lim=$num;
-                          
                           $c=1;
-                          do{
-                            $a=pg_fetch_object($res);
-                            echo $a->value;
-                            if($c !=$lim)echo ' ,';
+                          foreach($res as $a){
+                            echo $a['value'];
+                            if($c != $num) echo ' ,';
                             $c++;
-                          }while($c<=$lim);
-
+                          }
                         ?>
-
                       ]
                     }],
                     chart: {
@@ -446,24 +433,18 @@
                     xaxis: {
                       categories: [
                         <?php
-                        $lim=$num;
-                        
-                        for($i=1 ; $i<=($lim ) ; $i++) 
+                        for($i=1 ; $i<=$num ; $i++) 
                         {
                           echo " ' ".$i." ' ";
-                          if($i !=$lim) echo ' ,';
-                          
+                          if($i !=$num) echo ' ,';
                         }
-                         $class+=10;
                         ?>
                       ],
                     }
                   }).render();
                 });
               </script>
-              <?php 
-              
-              } ?>
+              <?php } ?>
               <!-- End Line Chart -->
 
             </div>
@@ -498,16 +479,8 @@
                   <div id="reportsChart"></div>
                   <?php 
                     $res=get_budget_table($connexion,$username);
-                    $num=0;
-                    $class=1;
-                    while($l = pg_fetch_assoc($res)){
-                      $num++;
-                    }
+                    $num = count($res);
                     if ($num==0)echo $num." ligne enregistré.";
-                    //echo $num." ligne enregistré.";
-                    $res=get_budget_table($connexion,$username);
-
-                
                   ?>
                   <script>
                     document.addEventListener("DOMContentLoaded", () => {
@@ -516,45 +489,36 @@
                           name: 'Reste du chèque fnal',
                           data: [
                             <?php
-                            $res=get_budget_table($connexion,$username);
-                            $lim=$num;
                             $c=1;
-                            do{
-                              $a=pg_fetch_object($res);
-                              echo $a->rest_du_cheque_final;
-                              if($c !=$lim)echo ' ,';
+                            foreach($res as $a){
+                              echo $a['rest_du_cheque_final'];
+                              if($c != $num) echo ' ,';
                               $c++;
-                            }while($c<=$lim);  
+                            }
                             ?>
                           ],
                         }, {
                           name: 'Epargne',
                           data: [
                             <?php
-                            $res=get_budget_table($connexion,$username);
-                            $lim=$num;
                             $c=1;
-                            do{
-                              $a=pg_fetch_object($res);
-                              echo $a->epargne;
-                              if($c !=$lim)echo ' ,';
+                            foreach($res as $a){
+                              echo $a['epargne'];
+                              if($c != $num) echo ' ,';
                               $c++;
-                            }while($c<=$lim);  
+                            }
                             ?>                            
                           ]
                         }, {
                           name: 'Salaire',
                           data: [
                             <?php
-                            $res=get_budget_table($connexion,$username);
-                            $lim=$num;
                             $c=1;
-                            do{
-                              $a=pg_fetch_object($res);
-                              echo $a->salaire;
-                              if($c !=$lim)echo ' ,';
+                            foreach($res as $a){
+                              echo $a['salaire'];
+                              if($c != $num) echo ' ,';
                               $c++;
-                            }while($c<=$lim);  
+                            }
                             ?>                          ]
                         }],
                         chart: {
@@ -588,17 +552,10 @@
                           type: 'number',
                           categories: [
                             <?php
-                            $res=get_budget_table($connexion,$username);
-
-                            $lim=$num;
-                          
-                            $c=1;
-                            do{
-                              $a=pg_fetch_object($res);
-                              echo " ' ".$c." ' ";
-                              if($c !=$lim)echo ' ,';
-                              $c++;
-                            }while($c<=$lim);  
+                            for($i=1; $i<=$num; $i++){
+                              echo " ' ".$i." ' ";
+                              if($i != $num) echo ' ,';
+                            }
                             ?> 
                           ]
                         },
@@ -645,11 +602,10 @@
                       </tr>
                     </thead>
                     <tbody>
-                      <?php while($l = pg_fetch_object($res)){ ?>
+                      <?php foreach($res as $l){ ?>
                       <tr>
-                        <!--<th scope="row"> <?php echo $l->id_depenses; ?> </th> v-->
-                        <td><?php echo $l->nom; ?></td>
-                        <td><?php echo $l->occurrences; ?></td>
+                        <td><?php echo $l['nom']; ?></td>
+                        <td><?php echo $l['occurrences']; ?></td>
                         <!--
                         <td><?php
                           if($l->type == "services" ||$l->type == "taxes" )

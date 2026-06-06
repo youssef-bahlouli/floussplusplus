@@ -78,35 +78,22 @@
                 $_SESSION["username"] = $username;
                 $_SESSION["user"] = $username;
                 
-                  $sql="
-  insert into budget(salaire,rest_du_cheque_final,epargne)
-  values
-	(0,0,0);
-	
-	insert into depenses(nom,description,prix,quantite,ddate,type)
-	values
-	('begin','begin',0,1,'2024-02-20 16:30:01','services');
-		
-	INSERT INTO utilisation (id_budget)
-	SELECT id_budget FROM budget order by id_budget desc limit 1 ;
-	update utilisation set username ='$username'
-  WHERE id_budget = (SELECT MAX(id_budget) FROM utilisation);
-
-	INSERT INTO users_dep (id_depenses)
-	SELECT id_depenses FROM depenses order by id_depenses desc limit 1;
-	update users_dep set username ='$username' 
-  WHERE id_depenses = (SELECT MAX(id_depenses) FROM users_dep);
-  
-  ;
-	
-	
-	INSERT INTO dep_budget (id_depenses)
-	
-	SELECT id_depenses FROM depenses order by id_depenses desc limit 1;
-	update dep_budget set id_budget=
-	(SELECT id_budget FROM budget order by id_budget desc limit 1);
-                ";
-                pg_query($connexion, $sql);
+                $connexion->budgets->insertOne([
+                    'username' => $username,
+                    'salaire' => 0.0,
+                    'rest_du_cheque_final' => 0.0,
+                    'epargne' => 0.0,
+                    'created_at' => new MongoDB\BSON\UTCDateTime()
+                ]);
+                $connexion->depenses->insertOne([
+                    'username' => $username,
+                    'nom' => 'begin',
+                    'description' => 'begin',
+                    'prix' => 0.0,
+                    'quantite' => 1,
+                    'ddate' => $date_payment,
+                    'type' => 'services'
+                ]);
                 ?>
                 
                 <?php

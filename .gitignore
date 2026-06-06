@@ -27,3 +27,7 @@ Screens/
 
 # Logs
 *.log
+
+# Composer dependencies
+vendor/
+composer.lock
