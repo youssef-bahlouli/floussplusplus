@@ -1,6 +1,17 @@
 <?php
   session_start();
-  $_SESSION['$username'] = $_REQUEST['username'].'';
+  if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
+    $username=$_REQUEST['username'];
+    $password=$_REQUEST['password'];
+    require 'php/get_info.php';
+    require 'php/account.php';
+    $dbconn=get_con_var();
+    $result = log_in($dbconn,$username,$password);
+    if($result === true){
+      header('Location: ../NiceAdmin/dashboard.php');
+      exit;
+    }
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -52,17 +63,12 @@
           <div class="row justify-content-center">
             <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
 
-            <?php
-                  $username=$_REQUEST['username'];
-                  $password=$_REQUEST['password'];
-                  $_SESSION['username']=$username;
-                  require 'php/get_info.php';
-                  require 'php/account.php';
-                  
-                  $dbconn=get_con_var();
-                  log_in($dbconn,$username,$password);
-                  
-            ?>
+            <?php if(isset($result) && is_string($result)): ?>
+                <div class="alert alert-danger text-center"><?php echo $result; ?></div>
+                <div class="text-center">
+                    <a href="../NiceAdmin/pages-login.html" class="btn btn-primary">Go Back</a>
+                </div>
+            <?php endif; ?>
 
             </div>
           </div>
