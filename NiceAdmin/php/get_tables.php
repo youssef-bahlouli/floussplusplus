@@ -23,9 +23,12 @@
             ['username' => $username],
             ['sort' => ['_id' => 1]]
         );
+        $user = $connexion->users->findOne(['_id' => $username]);
         $result = [];
         foreach ($cursor as $doc) {
             $arr = docToArray($doc);
+            $arr['first_name'] = $user ? $user['first_name'] : '';
+            $arr['last_name'] = $user ? $user['last_name'] : '';
             $arr['Budget'] = $arr['epargne'] + $arr['rest_du_cheque_final'];
             $result[] = $arr;
         }
