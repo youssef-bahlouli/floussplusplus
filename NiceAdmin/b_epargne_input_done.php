@@ -3,6 +3,15 @@
   if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
 
+  if(isset($_POST['epargne'])){
+    require './php/input.php';
+    $reponse=$_POST['reponse'] ?? 'no';
+    input_epargne($username,$_POST['epargne'],$reponse);
+    header('Location: dashboard.php');
+    exit;
+  }
+  header('Location: b_epargne_input.php');
+  exit;
 ?>
 
 
@@ -385,15 +394,6 @@
                 <h5 class="card-title">Veuillez saisir les informations</h5>
   
                 <!-- General Form Elements -->
-                <?php
-                if(!isset($_POST['epargne'])){ header('Location: b_epargne_input.php'); exit; }
-                require './php/input.php';
-                $reponse=$_POST['reponse'] ?? 'no';
-                $epargne=$_POST['epargne'];
-                input_epargne($username,$epargne,$reponse);
-                header('Location: dashboard.php');
-                exit;
-                ?>
 </div>
             </div>
   

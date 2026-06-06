@@ -3,6 +3,22 @@
   if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
 
+  if(isset($_POST['nom'],$_POST['description'],$_POST['type'],$_POST['prix'])){
+    $q=1;
+    $type=$_POST['type'];
+    if(!$type || $type==='3 types'){ header('Location: depenses_add.php'); exit; }
+    if($type!="taxes" && $type!="services"){
+      $q=$_POST['quantite'] ?? 1;
+    }
+    require 'php/get_info.php';
+    require 'php/input.php';
+    $dbconn=get_con_var();
+    input_depenses($dbconn,$username,$_POST['nom'],$_POST['description'],$type,$_POST['prix'],$q);
+    header('Location: dashboard.php');
+    exit;
+  }
+  header('Location: depenses_add.php');
+  exit;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -378,25 +394,6 @@
             <div class="card" style="width :600px">
               <div class="card-body" >
                 <h5 class="card-title">les informations sont enregistré</h5>
-                <?php
-                  if(!isset($_POST['nom'],$_POST['description'],$_POST['type'],$_POST['prix'])){ header('Location: depenses_add.php'); exit; }
-                  $q=1;
-                  $nom=$_POST['nom'];
-                  $description=$_POST['description'];
-                  $type=$_POST['type'];
-                  if(!$type || $type==='3 types'){ header('Location: depenses_add.php'); exit; }
-                  if($type!="taxes" && $type!="services"){
-                    $q=$_POST['quantite'] ?? 1;
-                  }
-                  $prix=$_POST['prix'];                  
-                  require 'php/get_info.php';
-                  require 'php/input.php';
-
-                  $dbconn=get_con_var();
-                  input_depenses($dbconn,$username,$nom,$description,$type,$prix,$q);
-                  header('Location: dashboard.php');
-                  exit;
-                ?>
 
 
  

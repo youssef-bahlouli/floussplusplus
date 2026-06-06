@@ -5,6 +5,19 @@
   if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
 
+  if(isset($_POST['salaire'])){
+    $salaire=$_POST['salaire'];
+    $condition=$_POST['condition'] ?? 'no';
+    if($condition == 'yes'){
+      $reste=$_POST['reste'] ?? $salaire;
+      input_salaire($username,$salaire,$reste,$condition);
+    }else {
+      input_salaire($username,$salaire,$salaire,$condition);
+    }
+    header('Location: dashboard.php');
+    exit;
+  }
+
 ?>
 
 <!DOCTYPE html>
@@ -382,26 +395,6 @@
           
   
                 <!-- General Form Elements -->
-                <?php
-                    if(!isset($_POST['salaire'])){ header('Location: b_salsaire_input.php'); exit; }
-                    $salaire=$_POST['salaire'];
-                    $condition=$_POST['condition'] ?? 'no';
-                    
-                    if($condition == 'yes'){
-                      $reste=$_POST['reste'] ?? $salaire;
-                      input_salaire($username,$salaire,$reste,$condition);
-                    }else {
-                      input_salaire($username,$salaire,$salaire,$condition);
-                    }
-                    header('Location: dashboard.php');
-                    exit;
-
-                    ?>
-                    
-                    
-                    <?php
-                    
-                ?>
               
 
                 

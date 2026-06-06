@@ -6,6 +6,13 @@
   if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
 
+  if(isset($_POST['salaire'],$_POST['reste'],$_POST['epargne'])){
+    set_budget($connexion,$_POST['salaire'],$_POST['reste'],$_POST['epargne'],$username);
+    header('Location: dashboard.php');
+    exit;
+  }
+  header('Location: budget_input.php');
+  exit;
   ?>
 
 <!DOCTYPE html>
@@ -371,15 +378,6 @@
             <div class="card" style="width :700px">
               <div class="card-body" >
                 <h5 class="card-title">Tous est complète</h5>
-                <?php
-                  if(!isset($_POST['salaire'],$_POST['reste'],$_POST['epargne'])){ header('Location: budget_input.php'); exit; }
-                  $salaire=$_POST['salaire'];
-                  $reste=$_POST['reste'];
-                  $epargne=$_POST['epargne'];
-                  set_budget($connexion,$salaire,$reste,$epargne,$username);
-                  header('Location: dashboard.php');
-                  exit;
-                ?>
               </div>
 
               
