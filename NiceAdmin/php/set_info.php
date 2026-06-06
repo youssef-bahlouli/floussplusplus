@@ -1,6 +1,7 @@
 <?php
-    function insert_budget($connexion,$salaire,$reste,$epargne){
+    function insert_budget($connexion,$username,$salaire,$reste,$epargne){
         $connexion->budgets->insertOne([
+            'username' => $username,
             'salaire' => (float)$salaire,
             'rest_du_cheque_final' => (float)$reste,
             'epargne' => (float)$epargne,
@@ -9,7 +10,7 @@
     }
     function set_budget($connexion,$salaire,$reste,$epargne,$username){
         $connexion->budgets->updateMany(
-            [],
+            ['username' => $username],
             ['$set' => [
                 'salaire' => (float)$salaire,
                 'rest_du_cheque_final' => (float)$reste,

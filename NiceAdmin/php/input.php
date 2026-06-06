@@ -1,7 +1,7 @@
 <?php
     function input_depenses($dbconn,$username,$nom,$description,$type,$prix,$q){
-        require 'get_info.php';
-        require 'set_info.php';
+        require_once 'get_info.php';
+        require_once 'set_info.php';
         $l=get_budget($username);
         $reste=$l['rest_du_cheque_final'];
         $epargne=$l['epargne'];
@@ -14,7 +14,7 @@
         }else{
             $reste-=$total;
         }
-        insert_budget($dbconn,$salaire,$reste,$epargne);
+        insert_budget($dbconn,$username,$salaire,$reste,$epargne);
         $l=get_budget_seperate($username,$salaire,$reste,$epargne);
         $budget_id = $l['_id'];
         $date= new DateTime();
@@ -27,17 +27,17 @@
         );
     }
     function input_salaire($username,$salaire,$reste,$condition){
-        require 'get_info.php';
-        require 'set_info.php';
+        require_once 'get_info.php';
+        require_once 'set_info.php';
         $dbconn = get_con_var();
         $budget=get_budget($username);
         $epargne=0;
         if($budget) $epargne=$budget['epargne'];
-        insert_budget($dbconn,$salaire,$reste,$epargne);
+        insert_budget($dbconn,$username,$salaire,$reste,$epargne);
     }
     function input_epargne($username,$epargne,$reponse){
-        require 'get_info.php';
-        require 'set_info.php';
+        require_once 'get_info.php';
+        require_once 'set_info.php';
         $connexion = get_con_var();
         $latest=get_budget($username);
         $reste=$latest['rest_du_cheque_final'];
@@ -45,7 +45,7 @@
         if($reponse=="yes"){
             $epargne+= $latest['epargne'];
         }
-        insert_budget($connexion,$salaire,$reste,$epargne);
+        insert_budget($connexion,$username,$salaire,$reste,$epargne);
     }
     function input_budget($connexion,$username,$salaire,$reste,$epargne){
         $budgets = $connexion->budgets;

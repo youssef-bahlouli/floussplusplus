@@ -10,6 +10,6 @@
     $date= new DateTime();
     insert_bag($connexion,$username,$reste,$date->format('Y-m-d H:i:s'));
     $epargne+=$reste;
-    insert_budget($connexion,$salaire,$salaire,$epargne);
+    insert_budget($connexion,$username,$salaire,$salaire,$epargne);
     echo "payment passé";
 ?>
