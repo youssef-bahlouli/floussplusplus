@@ -379,7 +379,7 @@
                   set_budget($connexion,$salaire,$reste,$epargne,$username);
                   header('Location: dashboard.php');
                   exit;
-  
+                ?>
               </div>
 
               

@@ -393,9 +393,7 @@
                 input_epargne($username,$epargne,$reponse);
                 header('Location: dashboard.php');
                 exit;
-              
-
-                
+                ?>
 </div>
             </div>
   
