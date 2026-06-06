@@ -68,12 +68,14 @@
                 $passwrd=$_REQUEST['passwrd'];
                 $age=$_REQUEST['age'];
 
-                //SESSION STARTED
-
+                if($connexion->users->findOne(['_id' => $username])){
+                    echo '<div class="alert alert-danger text-center">Username already exists</div>';
+                    echo '<div class="text-center"><a href="pages-register.html" class="btn btn-primary">Go Back</a></div>';
+                    exit;
+                }
 
                 $date = new DateTime();
                 $date_payment = $date->format("Y-m-d H:i:s"); 
-                //$date_payment ="2024-3-14 21:34"; 
                 insert_users($connexion, $username ,$first_name,$last_name,$age,$passwrd,$date_payment);
                 session_start();
                 $_SESSION["username"] = $username;
