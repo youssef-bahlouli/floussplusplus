@@ -62,12 +62,12 @@
                 require   './php/get_info.php';
                 require_once './php/services/LogService.php';
                 $connexion = get_con_var();
-                if(!isset($_REQUEST['username'],$_REQUEST['first_name'],$_REQUEST['last_name'],$_REQUEST['passwrd'],$_REQUEST['age'])){ header('Location: pages-register.html'); exit; }
-                $username=$_REQUEST['username'];
-                $first_name=$_REQUEST['first_name'];
-                $last_name=$_REQUEST['last_name'];
-                $passwrd=$_REQUEST['passwrd'];
-                $age=$_REQUEST['age'];
+                if(!isset($_POST['username'],$_POST['first_name'],$_POST['last_name'],$_POST['passwrd'],$_POST['age'])){ header('Location: pages-register.html'); exit; }
+                $username=$_POST['username'];
+                $first_name=$_POST['first_name'];
+                $last_name=$_POST['last_name'];
+                $passwrd=$_POST['passwrd'];
+                $age=$_POST['age'];
 
                 if($connexion->users->findOne(['_id' => $username])){
                     echo '<div class="alert alert-danger text-center">Username already exists</div>';

@@ -64,10 +64,10 @@
                         ?>
                         <tr>
                         <td class="little_wider">
-                        <?php echo $ligne['username']; ?>
+                        <?php echo htmlspecialchars($ligne['username'], ENT_QUOTES, 'UTF-8'); ?>
                         </td>
-                        <td class =" little_wider"> <?php echo $ligne['first_name'] ; ?></td>
-                        <td class =" little_wider"> <?php echo  $ligne['last_name']; ?></td>
+                        <td class =" little_wider"> <?php echo htmlspecialchars($ligne['first_name'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td class =" little_wider"> <?php echo htmlspecialchars($ligne['last_name'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                         <td class="wide"> <?php echo number_format($ligne['salaire']             ,1)." MAD" ; ?> </td>
                         <td class="wide"> <?php echo number_format($ligne['rest_du_cheque_final'],1)." MAD" ; ?> </td>
                         <td class="wide"> <?php echo number_format($ligne['epargne']             ,1)." MAD" ; ?> </td>

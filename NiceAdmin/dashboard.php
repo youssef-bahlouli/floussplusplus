@@ -339,7 +339,7 @@
             </div>
 
             <div class="card-body pb-0">
-              <h5 class="card-title">Budget Report <span>| of <?php get_fullname($username);?></span></h5>
+              <h5 class="card-title">Budget Report <span>| of <?php echo htmlspecialchars(get_fullname($username), ENT_QUOTES, 'UTF-8');?></span></h5>
 
               <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
 

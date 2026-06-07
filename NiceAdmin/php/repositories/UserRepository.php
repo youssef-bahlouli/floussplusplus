@@ -1,13 +1,11 @@
 <?php
-require_once __DIR__ . '/../database_connection.php';
+require_once __DIR__ . '/BaseRepository.php';
 
-class UserRepository
+class UserRepository extends BaseRepository
 {
-    private $collection;
-
-    public function __construct()
+    protected function collectionName(): string
     {
-        $this->collection = get_con_var()->users;
+        return 'users';
     }
 
     public function findByUsername($username)

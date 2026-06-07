@@ -128,8 +128,7 @@
                   <!-- Line Chart -->
                   <div id="reportsChart"></div>
                   <?php 
-                    $resCursor=get_budget_table($connexion,$username);
-                    $res=iterator_to_array($resCursor);
+                    $res=get_budget_table($connexion,$username);
                     $num = count($res);
                     if ($num==0)echo $num." ligne enregistré.";
                   ?>
@@ -243,7 +242,7 @@
                 </div>
 
                 <div class="card-body">
-                  <h5 class="card-title">la plupart des dépenses payées.<span> | de <?php echo get_fullname($username); ?></span></h5>
+                  <h5 class="card-title">la plupart des dépenses payées.<span> | de <?php echo htmlspecialchars(get_fullname($username), ENT_QUOTES, 'UTF-8'); ?></span></h5>
                   <?php $res= get_depenses_table_ord_occurr($connexion, $username);?>
                   <table class="table table-borderless datatable">
                     <thead>

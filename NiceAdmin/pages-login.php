@@ -1,8 +1,8 @@
 <?php
   session_start();
-  if(isset($_REQUEST['username']) && isset($_REQUEST['password'])){
-    $username=$_REQUEST['username'];
-    $password=$_REQUEST['password'];
+  if(isset($_POST['username']) && isset($_POST['password'])){
+    $username=$_POST['username'];
+    $password=$_POST['password'];
     require 'php/get_info.php';
     require 'php/account.php';
     $dbconn=get_con_var();

@@ -3,7 +3,6 @@
   if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
   require 'php/get_info.php';
-  require 'php/analyse.php';
   
   $pageTitle = 'Add Depense';
   require 'php/partials/head.php';

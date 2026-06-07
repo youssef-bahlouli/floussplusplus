@@ -44,6 +44,4 @@
             return $l['rest_du_cheque_final'];
         }else {return $l['epargne'];}
     }
-    class Chart{
-    }
 ?>

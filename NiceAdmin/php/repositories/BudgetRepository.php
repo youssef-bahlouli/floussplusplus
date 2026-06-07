@@ -1,13 +1,11 @@
 <?php
-require_once __DIR__ . '/../database_connection.php';
+require_once __DIR__ . '/BaseRepository.php';
 
-class BudgetRepository
+class BudgetRepository extends BaseRepository
 {
-    private $collection;
-
-    public function __construct()
+    protected function collectionName(): string
     {
-        $this->collection = get_con_var()->budgets;
+        return 'budgets';
     }
 
     public function getLatest($username)
@@ -19,6 +17,14 @@ class BudgetRepository
     }
 
     public function getAll($username)
+    {
+        return $this->collection->find(
+            ['username' => $username],
+            ['sort' => ['_id' => 1]]
+        );
+    }
+
+    public function getAllDescending($username)
     {
         return $this->collection->find(
             ['username' => $username],

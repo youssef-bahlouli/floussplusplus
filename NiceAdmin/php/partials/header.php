@@ -152,13 +152,13 @@
       <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
         <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
         <span class="d-none d-md-block dropdown-toggle ps-2">
-        <?php require 'php/user_info.php'; get_fullname($username); ?>
+        <?php require 'php/user_info.php'; echo htmlspecialchars(get_fullname($username), ENT_QUOTES, 'UTF-8'); ?>
         </span>
       </a>
 
       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
         <li class="dropdown-header">
-          <h6><?php get_fullname($username); ?></h6>
+          <h6><?php echo htmlspecialchars(get_fullname($username), ENT_QUOTES, 'UTF-8'); ?></h6>
           <span>Web Designer</span>
         </li>
         <li><hr class="dropdown-divider"></li>

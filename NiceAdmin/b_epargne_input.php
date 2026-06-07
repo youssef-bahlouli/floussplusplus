@@ -3,7 +3,6 @@
   if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
   require 'php/get_info.php';
-  require 'php/analyse.php';
 
   $pageTitle = 'Epargne';
   require 'php/partials/head.php';
@@ -91,7 +90,7 @@
                   <script>
                   $(document).ready(function() {
                   $('#myButton').click(function() {
-                    var username = '<?php echo $username ?>';
+                    var username = <?php echo json_encode($username, JSON_HEX_TAG|JSON_HEX_APOS|JSON_HEX_QUOT); ?>;
                     $.ajax({
                       url: './php/bag_algorithm.php',  // The PHP script that processes the request
                       type: 'POST',        // The method used to send data

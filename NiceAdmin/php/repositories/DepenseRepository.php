@@ -1,13 +1,11 @@
 <?php
-require_once __DIR__ . '/../database_connection.php';
+require_once __DIR__ . '/BaseRepository.php';
 
-class DepenseRepository
+class DepenseRepository extends BaseRepository
 {
-    private $collection;
-
-    public function __construct()
+    protected function collectionName(): string
     {
-        $this->collection = get_con_var()->depenses;
+        return 'depenses';
     }
 
     public function getLatest($username)
@@ -31,11 +29,16 @@ class DepenseRepository
         return $this->collection->aggregate([
             ['$match' => ['username' => $username]],
             ['$group' => [
-                '_id' => '$type',
-                'total' => ['$sum' => 1],
+                '_id' => '$nom',
+                'occurrences' => ['$sum' => 1],
                 'prix' => ['$first' => '$prix']
             ]],
-            ['$sort' => ['total' => -1]]
+            ['$sort' => ['occurrences' => -1]],
+            ['$project' => [
+                'nom' => '$_id',
+                'occurrences' => 1,
+                '_id' => 0
+            ]]
         ]);
     }
 

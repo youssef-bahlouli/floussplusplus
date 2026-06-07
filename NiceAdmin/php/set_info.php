@@ -3,9 +3,6 @@
     require_once __DIR__ . '/repositories/DepenseRepository.php';
     require_once __DIR__ . '/repositories/UserRepository.php';
     require_once __DIR__ . '/repositories/BagRepository.php';
-    function insert_budget($connexion,$username,$salaire,$reste,$epargne){
-        (new BudgetRepository())->insert($username, $salaire, $reste, $epargne);
-    }
     function set_budget($connexion,$salaire,$reste,$epargne,$username){
         (new BudgetRepository())->insert($username, $salaire, $reste, $epargne);
     }
@@ -26,4 +23,3 @@
     function insert_bag($connexion,$username,$value,$jour){
         (new BagRepository())->insert($username, $value, $jour);
     }
-?>
