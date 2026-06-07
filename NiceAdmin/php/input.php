@@ -1,66 +1,47 @@
 <?php
+    require_once __DIR__ . '/repositories/BudgetRepository.php';
+    require_once __DIR__ . '/repositories/DepenseRepository.php';
+    require_once __DIR__ . '/repositories/UserRepository.php';
+    require_once __DIR__ . '/services/LogService.php';
     function input_depenses($dbconn,$username,$nom,$description,$type,$prix,$q){
-        require_once 'get_info.php';
-        require_once 'set_info.php';
-        $l=get_budget($username);
-        $reste=$l['rest_du_cheque_final'];
-        $epargne=$l['epargne'];
-        $salaire=$l['salaire'];
-        $total=$q*$prix;
-        if($reste<=$total){
-            $total-=$reste;
-            $reste=0;
-            $epargne-=$total;
+        $budgetRepo = new BudgetRepository();
+        $l = $budgetRepo->getLatest($username);
+        $reste = $l['rest_du_cheque_final'];
+        $epargne = $l['epargne'];
+        $salaire = $l['salaire'];
+        $total = $q * $prix;
+        if($reste <= $total){
+            $total -= $reste;
+            $reste = 0;
+            $epargne -= $total;
         }else{
-            $reste-=$total;
+            $reste -= $total;
         }
-        $budgetResult = $dbconn->budgets->insertOne([
-            'username' => $username,
-            'salaire' => (float)$salaire,
-            'rest_du_cheque_final' => (float)$reste,
-            'epargne' => (float)$epargne,
-            'created_at' => new MongoDB\BSON\UTCDateTime()
-        ]);
-        $dbconn->depenses->insertOne([
-            'username' => $username,
-            'nom' => $nom,
-            'description' => $description,
-            'type' => $type,
-            'prix' => (float)$prix,
-            'quantite' => (int)$q,
-            'ddate' => (new DateTime())->format("Y-m-d H:i:s"),
-            'budget_id' => $budgetResult->getInsertedId()
-        ]);
+        $budgetResult = $budgetRepo->insert($username, $salaire, $reste, $epargne);
+        $ddate = (new DateTime())->format("Y-m-d H:i:s");
+        (new DepenseRepository())->insert($username, $nom, $description, $type, $prix, $q, $budgetResult->getInsertedId(), $ddate);
+        log_action($username, 'add_depense', "$nom - $total MAD ($type)");
     }
     function input_salaire($username,$salaire,$reste,$condition){
-        require_once 'get_info.php';
-        require_once 'set_info.php';
-        $dbconn = get_con_var();
-        $budget=get_budget($username);
-        $epargne=0;
-        if($budget) $epargne=$budget['epargne'];
-        insert_budget($dbconn,$username,$salaire,$reste,$epargne);
+        $budgetRepo = new BudgetRepository();
+        $budget = $budgetRepo->getLatest($username);
+        $epargne = 0;
+        if($budget) $epargne = $budget['epargne'];
+        $budgetRepo->insert($username, $salaire, $reste, $epargne);
+        log_action($username, 'add_salaire', "Salaire: $salaire MAD, Reste: $reste MAD");
     }
     function input_epargne($username,$epargne,$reponse){
-        require_once 'get_info.php';
-        require_once 'set_info.php';
-        $connexion = get_con_var();
-        $latest=get_budget($username);
-        $reste=$latest['rest_du_cheque_final'];
-        $salaire=$latest['salaire'];
-        if($reponse=="yes"){
-            $epargne+= $latest['epargne'];
+        $budgetRepo = new BudgetRepository();
+        $latest = $budgetRepo->getLatest($username);
+        $reste = $latest['rest_du_cheque_final'];
+        $salaire = $latest['salaire'];
+        if($reponse == "yes"){
+            $epargne += $latest['epargne'];
         }
-        insert_budget($connexion,$username,$salaire,$reste,$epargne);
+        $budgetRepo->insert($username, $salaire, $reste, $epargne);
+        log_action($username, 'add_epargne', "Epargne: $epargne MAD");
     }
     function input_budget($connexion,$username,$salaire,$reste,$epargne){
-        $budgets = $connexion->budgets;
-        $budgets->insertOne([
-            'username' => $username,
-            'salaire' => (float)$salaire,
-            'rest_du_cheque_final' => (float)$reste,
-            'epargne' => (float)$epargne,
-            'created_at' => new MongoDB\BSON\UTCDateTime()
-        ]);
+        (new BudgetRepository())->insert($username, $salaire, $reste, $epargne);
     }
 ?>

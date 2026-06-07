@@ -1,65 +1,29 @@
 <?php
+    require_once __DIR__ . '/repositories/BudgetRepository.php';
+    require_once __DIR__ . '/repositories/DepenseRepository.php';
+    require_once __DIR__ . '/repositories/UserRepository.php';
+    require_once __DIR__ . '/repositories/BagRepository.php';
     function insert_budget($connexion,$username,$salaire,$reste,$epargne){
-        $connexion->budgets->insertOne([
-            'username' => $username,
-            'salaire' => (float)$salaire,
-            'rest_du_cheque_final' => (float)$reste,
-            'epargne' => (float)$epargne,
-            'created_at' => new MongoDB\BSON\UTCDateTime()
-        ]);
+        (new BudgetRepository())->insert($username, $salaire, $reste, $epargne);
     }
     function set_budget($connexion,$salaire,$reste,$epargne,$username){
-        $connexion->budgets->insertOne([
-            'username' => $username,
-            'salaire' => (float)$salaire,
-            'rest_du_cheque_final' => (float)$reste,
-            'epargne' => (float)$epargne,
-            'created_at' => new MongoDB\BSON\UTCDateTime()
-        ]);
+        (new BudgetRepository())->insert($username, $salaire, $reste, $epargne);
     }
     function insert_depenses($connexion,$username,$nom,$description,$type,$prix,$q,$ddate){
-        $connexion->depenses->insertOne([
-            'username' => $username,
-            'nom' => $nom,
-            'description' => $description,
-            'type' => $type,
-            'prix' => (float)$prix,
-            'quantite' => (int)$q,
-            'ddate' => $ddate
-        ]);
+        $budget = (new BudgetRepository())->getLatest($username);
+        $budgetId = $budget ? $budget['_id'] : null;
+        (new DepenseRepository())->insert($username, $nom, $description, $type, $prix, $q, $budgetId, $ddate);
     }
     function set_bag($connexion,$username,$value,$jour){
-        $connexion->bag->updateOne(
-            ['username' => $username],
-            ['$set' => ['value' => (float)$value, 'jour' => $jour]]
-        );
+        (new BagRepository())->upsert($username, $value, $jour);
     }
     function set_users($connexion,$username,$first_name,$last_name,$age,$passwrd,$date_payment){
-        $connexion->users->updateOne(
-            ['_id' => $username],
-            ['$set' => [
-                'first_name' => $first_name,
-                'last_name' => $last_name,
-                'age' => (int)$age,
-                'date_payment' => $date_payment
-            ]]
-        );
+        (new UserRepository())->update($username, $first_name, $last_name, $age, $date_payment);
     }
     function insert_users($connexion,$username,$first_name,$last_name,$age,$passwrd,$date_payment){
-        $connexion->users->insertOne([
-            '_id' => $username,
-            'passwrd' => password_hash($passwrd, PASSWORD_DEFAULT),
-            'first_name' => $first_name,
-            'last_name' => $last_name,
-            'age' => (int)$age,
-            'date_payment' => $date_payment
-        ]);
+        (new UserRepository())->insert($username, $first_name, $last_name, $age, $passwrd, $date_payment);
     }
     function insert_bag($connexion,$username,$value,$jour){
-        $connexion->bag->insertOne([
-            'username' => $username,
-            'value' => (float)$value,
-            'jour' => $jour
-        ]);
+        (new BagRepository())->insert($username, $value, $jour);
     }
 ?>

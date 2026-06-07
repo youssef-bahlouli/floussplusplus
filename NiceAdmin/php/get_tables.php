@@ -1,51 +1,21 @@
 <?php
-    function get_depenses_table($connexion,$username){
-        $cursor = $connexion->depenses->find(
-            ['username' => $username],
-            ['sort' => ['_id' => -1]]
-        );
-        return docsToArray($cursor);
+    require_once __DIR__ . '/repositories/DepenseRepository.php';
+    require_once __DIR__ . '/repositories/BudgetRepository.php';
+    require_once __DIR__ . '/repositories/BagRepository.php';
+    require_once __DIR__ . '/repositories/UserRepository.php';
+    function get_depenses_table($connexion, $username){
+        return (new DepenseRepository())->getAll($username);
     }
-    function get_depenses_table_ord_occurr($connexion,$username){
-        $pipeline = [
-            ['$match' => ['username' => $username]],
-            ['$group' => ['_id' => '$nom', 'occurrences' => ['$sum' => 1]]],
-            ['$sort' => ['occurrences' => -1, '_id' => 1]]
-        ];
-        $result = [];
-        foreach ($connexion->depenses->aggregate($pipeline) as $doc) {
-            $result[] = ['nom' => $doc['_id'], 'occurrences' => $doc['occurrences']];
-        }
-        return $result;
+    function get_depenses_table_ord_occurr($connexion, $username){
+        return (new DepenseRepository())->getAllOrderedByOccurrence($username);
     }
-    function get_budget_table($connexion,$username){
-        $cursor = $connexion->budgets->find(
-            ['username' => $username],
-            ['sort' => ['_id' => 1]]
-        );
-        $user = $connexion->users->findOne(['_id' => $username]);
-        $result = [];
-        foreach ($cursor as $doc) {
-            $arr = docToArray($doc);
-            $arr['first_name'] = $user ? $user['first_name'] : '';
-            $arr['last_name'] = $user ? $user['last_name'] : '';
-            $arr['Budget'] = $arr['epargne'] + $arr['rest_du_cheque_final'];
-            $result[] = $arr;
-        }
-        return $result;
+    function get_budget_table($connexion, $username){
+        return (new BudgetRepository())->getLatest($username);
     }
-    function get_bag_table($connexion,$username){
-        $cursor = $connexion->bag->find(
-            ['username' => $username],
-            ['sort' => ['jour' => 1]]
-        );
-        return docsToArray($cursor);
+    function get_bag_table($connexion, $username){
+        return (new BagRepository())->getAll($username);
     }
     function get_users_table($connexion){
-        $cursor = $connexion->users->find(
-            [],
-            ['sort' => ['_id' => 1]]
-        );
-        return docsToArray($cursor);
+        return (new UserRepository())->getAll();
     }
 ?>

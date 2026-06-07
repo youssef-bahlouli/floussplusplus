@@ -1,4 +1,6 @@
 <?php
+    require_once __DIR__ . '/repositories/BagRepository.php';
+    require_once __DIR__ . '/repositories/DepenseRepository.php';
     class Analyse{
         private $username;
         private $nbr_of_products;
@@ -9,13 +11,13 @@
         private $bag_table_num_rows;
         public function __construct(){
         }
-        public function set_depenses_statistics($username,$array){
+        public function set_depenses_statistics($username,$cursor){
             $this->nbr_of_depenses=0;
             $this->nbr_of_products=0;
             $this->nbr_of_services=0;
             $this->nbr_of_taxes=0;
             $this->nbr_of_depenses=0;
-            foreach($array as $ligne){
+            foreach($cursor as $ligne){
                 $this->nbr_of_depenses++;
                 if($ligne['type']=='produits' ){$this->nbr_of_products++;}
                 if($ligne['type']=='services' ){$this->nbr_of_services++;}
@@ -34,15 +36,7 @@
             $this->bag_table_num_rows = count($res);
         }
         public function get_max_value_bag($connexion,$username){
-            $pipeline = [
-                ['$match' => ['username' => $username]],
-                ['$group' => ['_id' => null, 'maxx' => ['$max' => '$value']]]
-            ];
-            $cursor = $connexion->bag->aggregate($pipeline);
-            foreach ($cursor as $doc) {
-                return $doc['maxx'];
-            }
-            return 0;
+            return (new BagRepository())->getMaxValue($username);
         }
     }
     function give_max($l){
