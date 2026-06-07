@@ -10,7 +10,7 @@
         return (new DepenseRepository())->getAllOrderedByOccurrence($username);
     }
     function get_budget_table($connexion, $username){
-        return (new BudgetRepository())->getLatest($username);
+        return (new BudgetRepository())->getAll($username);
     }
     function get_bag_table($connexion, $username){
         return (new BagRepository())->getAll($username);

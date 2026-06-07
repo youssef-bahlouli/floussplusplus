@@ -33,7 +33,7 @@
         public function get_bag_table_num_rows() {  return $this->bag_table_num_rows;}
         public function set_bag_table_num_rows($connexion){
             $res=$this->get_bag_table();
-            $this->bag_table_num_rows = count($res);
+            $this->bag_table_num_rows = $res instanceof Traversable ? iterator_count($res) : count($res);
         }
         public function get_max_value_bag($connexion,$username){
             return (new BagRepository())->getMaxValue($username);

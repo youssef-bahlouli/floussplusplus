@@ -46,7 +46,8 @@
                 <br>
                 <br>
                 <?php 
-                $res=get_bag_table($connexion,$username);
+                $resCursor=get_bag_table($connexion,$username);
+                $res=iterator_to_array($resCursor);
                 $analyse = new Analyse();
                 $num = count($res);
                 if ($num==0)echo $num." payments passé.";
@@ -127,7 +128,8 @@
                   <!-- Line Chart -->
                   <div id="reportsChart"></div>
                   <?php 
-                    $res=get_budget_table($connexion,$username);
+                    $resCursor=get_budget_table($connexion,$username);
+                    $res=iterator_to_array($resCursor);
                     $num = count($res);
                     if ($num==0)echo $num." ligne enregistré.";
                   ?>

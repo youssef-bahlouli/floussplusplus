@@ -18,6 +18,14 @@ class BudgetRepository
         );
     }
 
+    public function getAll($username)
+    {
+        return $this->collection->find(
+            ['username' => $username],
+            ['sort' => ['_id' => -1]]
+        );
+    }
+
     public function getByFields($username, $salaire, $reste, $epargne)
     {
         return $this->collection->findOne([
