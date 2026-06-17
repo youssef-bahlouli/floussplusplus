@@ -31,4 +31,10 @@
     function get_users_table($connexion){
         return (new UserRepository())->getAll();
     }
+    function get_monthly_expenses($connexion, $username){
+        return iterator_to_array((new DepenseRepository())->getMonthlyTotals($username));
+    }
+    function get_top_expenses($connexion, $username){
+        return iterator_to_array((new DepenseRepository())->getTopByTotalCost($username));
+    }
 ?>

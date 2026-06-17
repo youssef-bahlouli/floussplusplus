@@ -3,109 +3,51 @@
   if(!isset($_SESSION['username'])){ header('Location: pages-login.html'); exit; }
   $username=$_SESSION['username'];
   require 'php/get_info.php';
+  require 'php/components/helpers.php';
   
-  $pageTitle = 'Add Depense';
+  $pageTitle = 'Add Expense';
   require 'php/partials/head.php';
   require 'php/partials/header.php';
   require 'php/partials/sidebar.php';
 ?>
 
-
-
-
-
   <main id="main" class="main">
 
     <div class="pagetitle">
-      <h1>Déclaration d'une dépense</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-          <li class="breadcrumb-item">Déclaration</li>
-          <li class="breadcrumb-item active">Déclaration d'une dépense</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+      <h1>Add an Expense</h1>
+      <?= ui_breadcrumb([
+        ['label' => 'Home', 'url' => 'dashboard.php'],
+        ['label' => 'Pages'],
+        ['label' => 'Add Expense', 'active' => true],
+      ]) ?>
+    </div>
 
     <section class="section">
-        <div class="row">
-          <div class="col-lg-6">
-  
-            <div class="card" >
-              <div class="card-body" >
-                <h5 class="card-title">Veuillez saisir les informations</h5>
-  
-                <!-- General Form Elements -->
-                <form action="./depenses_add_done.php" method="post">
-                  
-                  <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="floatingInput" name="nom">
-                      <label for="floatingInput" name="nom">Nom</label>
-                    </div>
-
-                    <div class="form-floating mb-3">
-                        <textarea class="form-control" placeholder="Leave a comment here" 
-                        id="floatingTextarea" style="height: 100px;"
-                        name="description"></textarea>
-                        <label for="floatingTextarea" name="description">Description</label>
-                    </div>
-
-
-                    <hr>
-                    <div class="row mb-3" style="margin-top : 20px">
-                        <label class="col-sm-2 col-form-label">Type</label>
-                        <div class="col-sm-10">
-                          <select class="form-select" aria-label="Default select example"
-                          onchange="checkSelect()" id="depenses_type-id" name="type">
-                            <option selected disabled value="">Select a type</option>
-                            <option value="produits">Produits</option>
-                            <option value="taxes">Taxes</option>
-                            <option value="services">Services</option>
-                          </select>
-                        </div>
-                      </div>
-                      <hr>
-
-                  <div class="row mb-3" style="margin-top : 7px">
-                    <label for="inputEmail" class="col-sm-2 col-form-label"
-                    name="prix">Prix</label>
-                    <div class="col-sm-10">
-                      <input type="number" class="form-control" name="prix" step="0.00001">
-                    </div>
-                  </div>
-
-                  <div class="row mb-3" style="margin-top : 7px">
-                    <label for="inputEmail" class="col-sm-2 col-form-label">
-                        Quantite
-                    </label>
-                    <div class="col-sm-10">
-                      <input type="number" class="form-control" name="quantite"
-                      value="1" id="quantite-id" >
-                    </div>
-                  </div>
-                  <!--
-                  <div class="row mb-3">
-                    <label for="inputDate" class="col-sm-2 col-form-label">Date</label>
-                    <div class="col-sm-10">
-                      <input type="date" class="form-control" name="date">
-                    </div>
-                  </div>
-                  -->
-                  <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                    <button type="reset" class="btn btn-secondary">Reset</button>
-                  </div>
-  
-                </form><!-- End General Form Elements -->
-  
+      <div class="row">
+        <div class="col-lg-6">
+          <?= new Card([
+            'title' => 'Please fill in the information',
+            'slot' => '<form action="./depenses_add_done.php" method="post">
+              ' . new Input(['name' => 'nom', 'type' => 'text', 'placeholder' => 'Expense name', 'inputAttrs' => ['required' => true]]) . '
+              ' . new Textarea(['name' => 'description', 'placeholder' => 'Description', 'inputAttrs' => ['style' => 'height:100px']]) . '
+              ' . new Select(['name' => 'type', 'options' => [
+                  ['value' => '', 'label' => 'Select type'],
+                  ['value' => 'produits', 'label' => 'Products'],
+                  ['value' => 'services', 'label' => 'Services'],
+                  ['value' => 'taxes', 'label' => 'Taxes'],
+                ], 'placeholder' => 'Choose type']) . '
+              ' . new Input(['name' => 'prix', 'type' => 'number', 'placeholder' => 'Price', 'inputAttrs' => ['required' => true]]) . '
+              ' . new Input(['name' => 'quantite', 'type' => 'number', 'placeholder' => 'Quantity (optional)', 'inputAttrs' => ['value' => '1']]) . '
+              <div class="text-center">
+                ' . new Button(['type' => 'submit', 'label' => 'Submit']) . '
+                ' . new Button(['type' => 'reset', 'variant' => 'secondary', 'label' => 'Reset']) . '
               </div>
-            </div>
-  
-          </div>
-
+            </form>',
+          ]) ?>
         </div>
-      </section>
+      </div>
+    </section>
 
-  </main><!-- End #main -->
+  </main>
 
   <?php require 'php/partials/footer.php'; ?>

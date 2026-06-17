@@ -6,6 +6,11 @@
 
   if(isset($_POST['salaire'])){
     $salaire=$_POST['salaire'];
+    if(isset($_POST['action']) && $_POST['action'] === 'receive'){
+      input_receive_salary($username, $salaire);
+      header('Location: dashboard.php');
+      exit;
+    }
     $condition=$_POST['condition'] ?? 'no';
     if($condition == 'yes'){
       $reste=$_POST['reste'] ?? $salaire;

@@ -42,6 +42,35 @@ class DepenseRepository extends BaseRepository
         ]);
     }
 
+    public function getMonthlyTotals($username)
+    {
+        return $this->collection->aggregate([
+            ['$match' => ['username' => $username]],
+            ['$addFields' => [
+                'parsedDate' => ['$dateFromString' => ['dateString' => '$ddate']]
+            ]],
+            ['$group' => [
+                '_id' => ['$dateToString' => ['format' => '%Y-%m', 'date' => '$parsedDate']],
+                'total' => ['$sum' => ['$multiply' => ['$prix', '$quantite']]]
+            ]],
+            ['$sort' => ['_id' => 1]]
+        ]);
+    }
+
+    public function getTopByTotalCost($username, $limit = 10)
+    {
+        return $this->collection->aggregate([
+            ['$match' => ['username' => $username]],
+            ['$group' => [
+                '_id' => '$nom',
+                'total' => ['$sum' => ['$multiply' => ['$prix', '$quantite']]]
+            ]],
+            ['$sort' => ['total' => -1]],
+            ['$limit' => $limit],
+            ['$project' => ['nom' => '$_id', 'total' => 1, '_id' => 0]]
+        ]);
+    }
+
     public function insert($username, $nom, $description, $type, $prix, $q, $budgetId, $ddate)
     {
         $this->collection->insertOne([

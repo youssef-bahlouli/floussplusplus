@@ -28,7 +28,7 @@
         $epargne = 0;
         if($budget) $epargne = $budget['epargne'];
         $budgetRepo->insert($username, $salaire, $reste, $epargne);
-        log_action($username, 'add_salaire', "Salaire: $salaire MAD, Reste: $reste MAD");
+        log_action($username, 'add_salaire', "Salary: $salaire MAD, Balance: $reste MAD");
     }
     function input_epargne($username,$epargne,$reponse){
         $budgetRepo = new BudgetRepository();
@@ -39,7 +39,16 @@
             $epargne += $latest['epargne'];
         }
         $budgetRepo->insert($username, $salaire, $reste, $epargne);
-        log_action($username, 'add_epargne', "Epargne: $epargne MAD");
+        log_action($username, 'add_epargne', "Savings: $epargne MAD");
+    }
+    function input_receive_salary($username,$salaire){
+        $budgetRepo = new BudgetRepository();
+        $latest = $budgetRepo->getLatest($username);
+        $oldEpargne = $latest ? (float)$latest['epargne'] : 0;
+        $oldReste = $latest ? (float)$latest['rest_du_cheque_final'] : 0;
+        $newEpargne = $oldEpargne + $oldReste;
+        $budgetRepo->insert($username, (float)$salaire, (float)$salaire, $newEpargne);
+        log_action($username, 'receive_salary', "Salary: $salaire MAD (previous rest $oldReste MAD moved to savings)");
     }
     function input_budget($connexion,$username,$salaire,$reste,$epargne){
         (new BudgetRepository())->insert($username, $salaire, $reste, $epargne);

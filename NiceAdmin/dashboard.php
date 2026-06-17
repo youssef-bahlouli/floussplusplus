@@ -5,487 +5,151 @@
   require 'php/get_tables.php';
   require 'php/get_info.php';
   require 'php/analyse.php';
+  require 'php/components/helpers.php';
   $pageTitle = 'Dashboard';
   require 'php/partials/head.php';
   require 'php/partials/header.php';
   require 'php/partials/sidebar.php';
 
+  $l = get_budget($username);
+  $salaire = $l ? $l['salaire'] : 0;
+  $reste = $l ? $l['rest_du_cheque_final'] : 0;
+  $epargne = $l ? $l['epargne'] : 0;
+  $pct = ($salaire > 0) ? number_format(($reste / $salaire) * 100, 2) : 0;
+  $connexion = get_con_var();
+  $depenses = iterator_to_array(get_depenses_table($connexion, $username));
+  $analyse = new Analyse();
+  $analyse->set_depenses_statistics($username, $depenses);
 ?>
-
-
-
-
 
   <main id="main" class="main">
 
     <div class="pagetitle">
       <h1>Dashboard</h1>
-      <nav>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
-          <li class="breadcrumb-item active">Dashboard</li>
-        </ol>
-      </nav>
-    </div><!-- End Page Title -->
+      <?= ui_breadcrumb([
+        ['label' => 'Home', 'url' => 'dashboard.php'],
+        ['label' => 'Dashboard', 'active' => true],
+      ]) ?>
+    </div>
 
     <section class="section dashboard">
       <div class="row">
 
-        <!-- Left side columns -->
         <div class="col-lg-8">
           <div class="row">
 
-            <!-- Sales Card -->
-            <div class="col-xxl-4 col-md-6">
-              <div class="card info-card sales-card">
+            <?= ui_statsgrid([
+              'salaire' => $salaire,
+              'reste' => $reste,
+              'epargne' => $epargne,
+              'pct' => $pct,
+            ]) ?>
 
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">Revenue <span>| Today</span></h5>
-                  <?php 
-                    $b=get_budget($username);
-                    //echo $b['id_budget'];
-                   ?>
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-cart"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6>
-                        <?php
-                        $budget=get_budget($username);
-                        echo ($budget ? $budget['rest_du_cheque_final'] : 0)." MAD";     
-                        ?>
-                      </h6>
-                      <span class="text-success small pt-1 fw-bold">
-                        <?php
-                        $l=$budget;
-                        $pct = ($l && $l['salaire'] > 0) ? number_format(($l['rest_du_cheque_final']/$l['salaire'])*100, 2) : 0;
-                        echo $pct;?>%
-                      </span> 
-                      <span class="text-muted small pt-2 ps-1">de salaire</span>
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div><!-- End Sales Card -->
-
-            <!-- Revenue Card -->
-            <div class="col-xxl-4 col-md-6">
-              <div class="card info-card revenue-card">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">Epargne <span>| This Month</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-currency-dollar"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6>
-                        <?php
-                        echo ($l ? $l['epargne'] : 0)." MAD";
-                        ?>
-
-                      </h6>
-                      <span class="text-success small pt-1 fw-bold">8%</span> <span class="text-muted small pt-2 ps-1">increase</span>
-
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div><!-- End Revenue Card -->
-
-            <!-- Epargne Card -->
-            <div class="col-xxl-4 col-xl-12">
-
-              <div class="card info-card customers-card">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body">
-                  <h5 class="card-title">Budget <span>| This Year</span></h5>
-
-                  <div class="d-flex align-items-center">
-                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                      <i class="bi bi-people"></i>
-                    </div>
-                    <div class="ps-3">
-                      <h6>
-                      <?php
-                        echo ($l ? $l['rest_du_cheque_final']+$l['epargne'] : 0)." MAD";
-                        ?>
-
-                      </h6>
-                      <span class="text-danger small pt-1 fw-bold">
-                        12%</span> 
-                        <span class="text-muted small pt-2 ps-1">decrease</span>
-
-                    </div>
-                  </div>
-
-                </div>
-              </div>
-
-            </div><!-- End Epargne Card -->
-
-            <!-- Reports -->
-            
-            <!-- Recent Sales -->
             <div class="col-12">
               <div class="card recent-sales overflow-auto">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
                 <div class="card-body">
-                  <h5 class="card-title">Recent Sales <span>| Today</span></h5>
-
-                  <table class="table table-borderless datatable">
-                    <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Customer</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row"><a href="#">#2457</a></th>
-                        <td>Brandon Jacob</td>
-                        <td><a href="#" class="text-primary">At praesentium minu</a></td>
-                        <td>$64</td>
-                        <td><span class="badge bg-success">Approved</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2147</a></th>
-                        <td>Bridie Kessler</td>
-                        <td><a href="#" class="text-primary">Blanditiis dolor omnis similique</a></td>
-                        <td>$47</td>
-                        <td><span class="badge bg-warning">Pending</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2049</a></th>
-                        <td>Ashleigh Langosh</td>
-                        <td><a href="#" class="text-primary">At recusandae consectetur</a></td>
-                        <td>$147</td>
-                        <td><span class="badge bg-success">Approved</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2644</a></th>
-                        <td>Angus Grady</td>
-                        <td><a href="#" class="text-primar">Ut voluptatem id earum et</a></td>
-                        <td>$67</td>
-                        <td><span class="badge bg-danger">Rejected</span></td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#">#2644</a></th>
-                        <td>Raheem Lehner</td>
-                        <td><a href="#" class="text-primary">Sunt similique distinctio</a></td>
-                        <td>$165</td>
-                        <td><span class="badge bg-success">Approved</span></td>
-                      </tr>
-                    </tbody>
-                  </table>
-
+                  <h5 class="card-title">Latest Expenses <span>| Today</span></h5>
+                  <?php
+                    $rows = array_slice($depenses, 0, 5);
+                    echo new Table([
+                      'columns' => [
+                        ['key' => '_idx', 'label' => '#'],
+                        ['key' => 'nom', 'label' => 'Name'],
+                        ['key' => 'type', 'label' => 'Type'],
+                        ['key' => 'prix', 'label' => 'Price'],
+                        ['key' => 'quantite', 'label' => 'Quantity'],
+                      ],
+                      'rows' => $rows,
+                      'renderers' => [
+                        '_idx' => fn($v, $row, $idx) => $idx + 1,
+                        'prix' => fn($v) => number_format((float)$v, 2) . ' MAD',
+                        'quantite' => fn($v) => '<span class="badge bg-primary">' . (int)$v . '</span>',
+                      ],
+                    ]);
+                  ?>
                 </div>
-
               </div>
-            </div><!-- End Recent Sales -->
-
-            <!-- Top Selling -->
-            <div class="col-12">
-              <div class="card top-selling overflow-auto">
-
-                <div class="filter">
-                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                    <li class="dropdown-header text-start">
-                      <h6>Filter</h6>
-                    </li>
-
-                    <li><a class="dropdown-item" href="#">Today</a></li>
-                    <li><a class="dropdown-item" href="#">This Month</a></li>
-                    <li><a class="dropdown-item" href="#">This Year</a></li>
-                  </ul>
-                </div>
-
-                <div class="card-body pb-0">
-                  <h5 class="card-title">Top Selling <span>| Today</span></h5>
-
-                  <table class="table table-borderless">
-                    <thead>
-                      <tr>
-                        <th scope="col">Preview</th>
-                        <th scope="col">Product</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Sold</th>
-                        <th scope="col">Revenue</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-1.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Ut inventore ipsa voluptas nulla</a></td>
-                        <td>$64</td>
-                        <td class="fw-bold">124</td>
-                        <td>$5,828</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-2.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Exercitationem similique doloremque</a></td>
-                        <td>$46</td>
-                        <td class="fw-bold">98</td>
-                        <td>$4,508</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-3.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Doloribus nisi exercitationem</a></td>
-                        <td>$59</td>
-                        <td class="fw-bold">74</td>
-                        <td>$4,366</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-4.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum error</a></td>
-                        <td>$32</td>
-                        <td class="fw-bold">63</td>
-                        <td>$2,016</td>
-                      </tr>
-                      <tr>
-                        <th scope="row"><a href="#"><img src="assets/img/product-5.jpg" alt=""></a></th>
-                        <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus repellendus</a></td>
-                        <td>$79</td>
-                        <td class="fw-bold">41</td>
-                        <td>$3,239</td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                </div>
-
-              </div>
-            </div><!-- End Top Selling -->
-
-          </div>
-        </div><!-- End Left side columns -->
-
-        <!-- Right side columns -->
-        <div class="col-lg-4">
-          <!-- Budget Report -->
-          <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
             </div>
 
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+
+          <div class="card">
             <div class="card-body pb-0">
-              <h5 class="card-title">Budget Report <span>| of <?php echo htmlspecialchars(get_fullname($username), ENT_QUOTES, 'UTF-8');?></span></h5>
-
+              <h5 class="card-title">Budget Report <span>| of <?= htmlspecialchars(get_fullname($username), ENT_QUOTES, 'UTF-8') ?></span></h5>
               <div id="budgetChart" style="min-height: 400px;" class="echart"></div>
-
               <script>
-              
-                
                 document.addEventListener("DOMContentLoaded", () => {
-                  var budgetChart = echarts.init(document.querySelector("#budgetChart")).setOption({
-                    legend: {
-                      data: ['Revenue', 'Epargne']
-                    },
+                  echarts.init(document.querySelector("#budgetChart")).setOption({
+                    legend: { data: ['Revenue', 'Savings'] },
                     radar: {
-                      // shape: 'circle',
                       indicator: [
-                        {name: 'Montant', max: <?php echo give_max($l) ; ?>}
-                        ,
-                        {name: 'Administration', max: 16000}
-                          ,
-                        {name: 'Information Technology',max: 30000}
-                        ,
-                        {name: 'Customer Support',max: 38000}
-                        ,
-                        {name: 'Development',max: 52000}
-                        ,
-                        {name: 'Marketing',max: 25000}
+                        { name: 'Amount', max: <?= give_max($l) ?> },
+                        { name: 'Administration', max: 16000 },
+                        { name: 'Information Technology', max: 30000 },
+                        { name: 'Customer Support', max: 38000 },
+                        { name: 'Development', max: 52000 },
+                        { name: 'Marketing', max: 25000 },
                       ]
                     },
                     series: [{
                       name: 'Budget vs spending',
                       type: 'radar',
-                      data: [{
-                          value: [ <?php echo $l['rest_du_cheque_final'] ;?>, 3000, 20000, 35000, 50000, 18000],
-                          name: 'Revenue'
-                        },
-                        {
-                          value: [ <?php echo $l['epargne'] ;?> , 14000, 28000, 26000, 42000, 21000],
-                          name: 'Epargne'
-                        }
+                      data: [
+                        { value: [<?= $reste ?>, 3000, 20000, 35000, 50000, 18000], name: 'Revenue' },
+                        { value: [<?= $epargne ?>, 14000, 28000, 26000, 42000, 21000], name: 'Savings' },
                       ]
                     }]
                   });
                 });
               </script>
-
-            </div>
-
-          </div><!-- End Budget Report -->
-
-          <!-- Website Traffic -->
-          <div class="card">
-            <div class="filter">
-              <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-              <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                <li class="dropdown-header text-start">
-                  <h6>Filter</h6>
-                </li>
-
-                <li><a class="dropdown-item" href="#">Today</a></li>
-                <li><a class="dropdown-item" href="#">This Month</a></li>
-                <li><a class="dropdown-item" href="#">This Year</a></li>
-              </ul>
-            </div>
-
-            <div class="card-body pb-0">
-              <h5 class="card-title">Statisique de dépenses <span>| ...</span></h5>
-
-              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
-              
-              <script>
-              <?php
-                $connexion = get_con_var();
-                $array = get_depenses_table($connexion,$username);
-                $analyse = new Analyse();
-                $analyse->set_depenses_statistics($username,$array);
-              ?>
-                document.addEventListener("DOMContentLoaded", () => {
-                  echarts.init(document.querySelector("#trafficChart")).setOption({
-                    tooltip: {
-                      trigger: 'item'
-                    },
-                    legend: {
-                      top: '5%',
-                      left: 'center'
-                    },
-                    series: [{
-                      name: 'Access From',
-                      type: 'pie',
-                      radius: ['40%', '70%'],
-                      avoidLabelOverlap: false,
-                      label: {
-                        show: false,
-                        position: 'center'
-                      },
-                      emphasis: {
-                        label: {
-                          show: true,
-                          fontSize: '18',
-                          fontWeight: 'bold'
-                        }
-                      },
-                      labelLine: {
-                        show: false
-                      },
-                      data: [{
-                          value: <?php echo $analyse->get_nbr_of_products();?>,
-                          name: 'products'
-                        },
-                        {
-                          value  : <?php echo $analyse->get_nbr_of_services(); ?> ,
-                          name : 'services'
-                        }
-                        ,
-                        {
-                          value  : <?php echo $analyse->get_nbr_of_taxes(); ?> ,
-                          name : 'taxes'
-                        }
-
-
-                      ]
-                    }]
-                  });
-                });
-              </script>
-
-              <?php echo $analyse->get_max_value_bag($connexion,$username);?>
-
-            </div>
-          </div><!-- End Website Traffic -->
-
-          <div class="card">
-            <div class="card-body pb-0">
-              <h5 class="card-title">Activit&eacute; r&eacute;cente</h5>
-              <div class="news">
-                <?php
-                  require 'php/services/LogService.php';
-                  render_log($username);
-                ?>
-              </div>
             </div>
           </div>
 
-        </div><!-- End Right side columns -->
+          <div class="card">
+            <div class="card-body pb-0">
+              <h5 class="card-title">Expense Statistics <span>| ...</span></h5>
+              <div id="trafficChart" style="min-height: 400px;" class="echart"></div>
+              <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                  echarts.init(document.querySelector("#trafficChart")).setOption({
+                    tooltip: { trigger: 'item' },
+                    legend: { top: '5%', left: 'center' },
+                    series: [{
+                      name: 'Expenses',
+                      type: 'pie',
+                      radius: ['40%', '70%'],
+                      avoidLabelOverlap: false,
+                      label: { show: false, position: 'center' },
+                      emphasis: { label: { show: true, fontSize: '18', fontWeight: 'bold' } },
+                      labelLine: { show: false },
+                      data: [
+                        { value: <?= $analyse->get_nbr_of_products() ?>, name: 'Products' },
+                        { value: <?= $analyse->get_nbr_of_services() ?>, name: 'Services' },
+                        { value: <?= $analyse->get_nbr_of_taxes() ?>, name: 'Taxes' },
+                      ]
+                    }]
+                  });
+                });
+              </script>
+            </div>
+          </div>
+
+          <?php
+            require 'php/services/LogService.php';
+            echo new ActivityLog([
+              'logs' => get_logs($username),
+              'title' => 'Recent Activity',
+            ]);
+          ?>
+
+        </div>
 
       </div>
     </section>
 
-  </main><!-- End #main -->
+  </main>
 
   <?php require 'php/partials/footer.php'; ?>

@@ -10,7 +10,7 @@ session_start();
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Budget - FLouss++</title>
+  <title>Budget Setup - FLouss++</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -34,13 +34,7 @@ session_start();
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
-  <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Updated: Apr 20 2024 with Bootstrap v5.3.3
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
+  <!-- NiceAdmin Template by BootstrapMade -->
 </head>
 
 <body>
@@ -64,39 +58,19 @@ session_start();
                 <!-- General Form Elements -->
                 <form action="./budget_input_done.php" method="post">
 
-                <label for="floatingInput" name="salaire">Salaire</label>
+                <label for="floatingInput" name="salaire">Salary</label>
                 <br>
                   <div class="form-floating mb-3">
                     <input type="number" class="form-control" id="floatingInput" name="salaire">
-                    <label for="floatingInput" name="salaire">Salaire</label>
+                    <label for="floatingInput" name="salaire">Salary</label>
                 </div>
-                <p>Si tu n'a pas dépensé une partie de ton paycheck, <br> ecrire le montant salaire  dans le reste</p>
+                <p>If you haven't spent part of your paycheck,<br> enter the salary amount in the balance</p>
 
-                <!--
-                <fieldset class="row mb-3">
-                    <legend class="col-form-label col-sm-2 pt-0">Réponse :</legend>
-                    <div class="col-sm-10">
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="condition" 
-                        id="condition1" value="yes" onclick="handleClick_salaire(this)" checked>
-                        <label class="form-check-label" for="condition1">
-                          Yes
-                        </label>
-                      </div>
-                      <div class="form-check">
-                        <input class="form-check-input" type="radio" name="condition" 
-                        id="condition2" value="no" onclick="handleClick_salaire(this)">
-                        <label class="form-check-label" for="condition2">
-                          No
-                        </label>
-                      </div> 
-                    </div>
-                  </fieldset>
-                  -->
+
 
                   <div class="row mb-3" style="margin-top : 7px" >
                     <label for="inputEmail" class="col-sm-2 col-form-label">
-                        reste  :
+                        balance :
                     </label>
                     <div class="col-sm-10">
                       <input type="number" class="form-control" name="reste"
@@ -109,13 +83,13 @@ session_start();
                   <hr>
                   <br>
                   <br>
-                  <p>Epargne</p>
+                  <p>Savings</p>
 
 
                   
                   <div class="form-floating mb-3">
                     <input type="number" class="form-control" id="floatingInput" name="epargne">
-                    <label for="floatingInput" name="epargne">Epargne</label>
+                    <label for="floatingInput" name="epargne">Savings</label>
                 </div>
 
 
@@ -129,11 +103,7 @@ session_start();
               </div>
 
               <div class="credits">
-                <!-- All the links in the footer should remain intact. -->
-                <!-- You can delete the links only if you purchased the pro version. -->
-                <!-- Licensing information: https://bootstrapmade.com/license/ -->
-                <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
-                Coded by <a href="https://google.com/">Youssef Bahlouli</a>
+                <a href="https://bootstrapmade.com/">NiceAdmin</a>
               </div>
 
             </div>

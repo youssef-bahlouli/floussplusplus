@@ -4,7 +4,7 @@
     $connexion=get_con_var();
     $username = $_POST['username1'];
     $l=get_budget($username);
-    if(!$l){ echo "Aucun budget trouvé"; exit; }
+    if(!$l){ echo "No budget found"; exit; }
     $reste=$l['rest_du_cheque_final'];
     $epargne=$l['epargne'];
     $salaire=$l['salaire'];
@@ -12,5 +12,5 @@
     insert_bag($connexion,$username,$reste,$date->format('Y-m-d H:i:s'));
     $epargne+=$reste;
     set_budget($connexion,$salaire,$salaire,$epargne,$username);
-    echo "payment passé";
+    echo "Payment processed";
 ?>
