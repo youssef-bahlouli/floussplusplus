@@ -12,5 +12,5 @@
     header('Location: dashboard.php');
     exit;
   }
-  header('Location: budget_input.php');
+  header('Location: declarations.php');
   exit;

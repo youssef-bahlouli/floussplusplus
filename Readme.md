@@ -24,53 +24,53 @@ A modern web app for tracking personal finances: income, expenses, savings, with
 
 ## Implementation Plan
 
-### Feature 1: Dashboard Card — Show Rest + Percentage
+### ~~Feature 1: Dashboard Card — Show Rest + Percentage~~ DONE
 **File:** `dashboard.php`
-- Display **rest** (rest_du_cheque_final) as the primary stat on the first dashboard card
-- Show percentage below: `(rest / salary) * 100%`
-- Savings card stays as-is
+- ~~Display **rest** (rest_du_cheque_final) as the primary stat on the first dashboard card~~
+- ~~Show percentage below: `(rest / salary) * 100%`~~
+- ~~Savings card stays as-is~~
 
-### Feature 2: Fix "Receive Salary" Logic
+### ~~Feature 2: Fix "Receive Salary" Logic~~ DONE
 **File:** `php/input.php` — `input_receive_salary()`
-- Read salary from the **last budget record** instead of from POST
-- New record: `salaire = last_salaire`, `rest = salaire`, `epargne = old_epargne + old_rest`
-- Edge case: no previous record → show error, don't insert
+- ~~Read salary from the **last budget record** instead of from POST~~
+- ~~New record: `salaire = last_salaire`, `rest = salaire`, `epargne = old_epargne + old_rest`~~
+- ~~Edge case: no previous record → show error, don't insert~~
 
-### Feature 3: Combine Declarations into Single Page (Accordion)
+### ~~Feature 3: Combine Declarations into Single Page (Accordion)~~ DONE
 **New file:** `declarations.php`
 **Remove:** `budget_input.php`, `b_salsaire_input.php`, `b_epargne_input.php`
 Three accordion sections:
-1. **Budget Setup** — Salary + Rest + Savings initial setup
-2. **Income Declaration** — New salary entry + Receive Salary
-3. **Savings Declaration** — Savings entry with "Is this added value?" toggle
+1. ~~**Budget Setup** — Salary + Rest + Savings initial setup~~
+2. ~~**Income Declaration** — New salary entry + Receive Salary~~
+3. ~~**Savings Declaration** — Savings entry with "Is this added value?" toggle~~
 
-### Feature 4: Spending Question on Both Salary & Receive
+### ~~Feature 4: Spending Question on Both Salary & Receive~~ DONE
 **File:** `declarations.php` + `b_salsaire_input_done.php`
-- Radio: "Did you spend some of this salary?" → Yes / No
-- Shown for **both** regular salary submit **and** Receive Salary
-- If Yes → show `reste` input; deduct spent amount from rest
-- Edge case: spent > salary → clamp to 0, warn in log
+- ~~Radio: "Did you spend some of this salary?" → Yes / No~~
+- ~~Shown for **both** regular salary submit **and** Receive Salary~~
+- ~~If Yes → show `reste` input; deduct spent amount from rest~~
+- ~~Edge case: spent > salary → clamp to 0, warn in log~~
 
-### Feature 5: Expense Quick Entry
+### ~~Feature 5: Expense Quick Entry~~ DONE
 **File:** `depenses_add.php`
 Two tabs:
-- **Tab A — Manual:** Auto-fills inputs with last entered expense; includes Reset button
-- **Tab B — Quick:** Dropdown listing past expense names; selecting auto-fills all fields
-- Edge case: no history → show "No previous expenses" placeholder
+- ~~**Tab A — Manual:** Auto-fills inputs with last entered expense; includes Reset button~~
+- ~~**Tab B — Quick:** Dropdown listing past expense names; selecting auto-fills all fields~~
+- ~~Edge case: no history → show "No previous expenses" placeholder~~
 
-### Feature 6: Sidebar & Navigation Updates
+### ~~Feature 6: Sidebar & Navigation Updates~~ DONE
 **File:** `php/partials/sidebar.php`
-- Declaration submenu items point to `declarations.php`
-- Update redirects in handler files
-- Remove old file references
+- ~~Declaration submenu items point to `declarations.php`~~
+- ~~Update redirects in handler files~~
+- ~~Remove old file references~~
 
 ## Implementation Order
-1. Feature 1 (Dashboard card)
-2. Feature 2 (Receive Salary fix)
-3. Feature 4 (Spending question on both)
-4. Feature 3 (Accordion declarations page)
-5. Feature 5 (Expense quick entry)
-6. Feature 6 (Sidebar + redirects)
+1. ~~Feature 1 (Dashboard card)~~
+2. ~~Feature 2 (Receive Salary fix)~~
+3. ~~Feature 4 (Spending question on both)~~
+4. ~~Feature 3 (Accordion declarations page)~~
+5. ~~Feature 5 (Expense quick entry)~~
+6. ~~Feature 6 (Sidebar + redirects)~~
 
 ## Data Model
 | Field | Type | Description |

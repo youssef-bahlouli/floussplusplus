@@ -10,5 +10,5 @@
     header('Location: dashboard.php');
     exit;
   }
-  header('Location: b_epargne_input.php');
+  header('Location: declarations.php');
   exit;

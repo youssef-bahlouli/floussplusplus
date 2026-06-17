@@ -40,18 +40,13 @@
     </a>
     <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
       <li>
-        <a href="b_salsaire_input.php">
-          <i class="bi bi-circle"></i><span>Income</span>
+        <a href="./declarations.php">
+          <i class="bi bi-circle"></i><span>Declarations</span>
         </a>
       </li>
       <li>
         <a href="./depenses_add.php">
-          <i class="bi bi-circle"></i><span>expenses</span>
-        </a>
-      </li>
-      <li>
-        <a href="./b_epargne_input.php">
-          <i class="bi bi-circle"></i><span>Savings</span>
+          <i class="bi bi-circle"></i><span>Expenses</span>
         </a>
       </li>
     </ul>

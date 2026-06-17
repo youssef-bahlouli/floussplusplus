@@ -4,22 +4,30 @@
   $username=$_SESSION['username'];
   require './php/input.php';
 
-  if(isset($_POST['salaire'])){
-    $salaire=$_POST['salaire'];
-    if(isset($_POST['action']) && $_POST['action'] === 'receive'){
-      input_receive_salary($username, $salaire);
-      header('Location: dashboard.php');
+  $condition = $_POST['condition'] ?? 'no';
+
+  if (isset($_POST['action']) && $_POST['action'] === 'receive') {
+    $spent = ($condition === 'yes') ? (float)($_POST['reste'] ?? 0) : 0;
+    $result = input_receive_salary($username, $spent);
+    if (!$result) {
+      $_SESSION['error'] = 'No budget record found. Set up your budget first.';
+      header('Location: declarations.php');
       exit;
-    }
-    $condition=$_POST['condition'] ?? 'no';
-    if($condition == 'yes'){
-      $reste=$_POST['reste'] ?? $salaire;
-      input_salaire($username,$salaire,$reste,$condition);
-    }else {
-      input_salaire($username,$salaire,$salaire,$condition);
     }
     header('Location: dashboard.php');
     exit;
   }
-  header('Location: b_salsaire_input.php');
+
+  if (isset($_POST['salaire'])){
+    $salaire = (float)$_POST['salaire'];
+    if ($condition === 'yes') {
+      $reste = (float)($_POST['reste'] ?? $salaire);
+      input_salaire($username, $salaire, $reste, $condition);
+    } else {
+      input_salaire($username, $salaire, $salaire, $condition);
+    }
+    header('Location: dashboard.php');
+    exit;
+  }
+  header('Location: declarations.php');
   exit;
