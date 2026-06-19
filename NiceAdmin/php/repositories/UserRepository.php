@@ -21,7 +21,8 @@ class UserRepository extends BaseRepository
             'first_name' => $first_name,
             'last_name' => $last_name,
             'age' => (int)$age,
-            'date_payment' => $date_payment
+            'date_payment' => $date_payment,
+            'currency' => 'MAD'
         ]);
     }
 
@@ -35,6 +36,14 @@ class UserRepository extends BaseRepository
                 'age' => (int)$age,
                 'date_payment' => $date_payment
             ]]
+        );
+    }
+
+    public function updateCurrency($username, $currency)
+    {
+        $this->collection->updateOne(
+            ['_id' => $username],
+            ['$set' => ['currency' => $currency]]
         );
     }
 

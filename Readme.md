@@ -1,84 +1,91 @@
-# FLouss++ — Personal Budget Management Application
+# FLouss++ — Personal Budget Management
 
-A modern web app for tracking personal finances: income, expenses, savings, with interactive dashboards.
+A self-hosted web application for tracking income, expenses, and savings with interactive dashboards and charts. Built with PHP + MongoDB + Bootstrap 5.
 
 ## Requirements
+
 - PHP 8.0+
-- MongoDB 5.0+
-- Composer
+- [MongoDB](https://www.mongodb.com/try/download/community) 5.0+ (running on `localhost:27017`)
+- [Composer](https://getcomposer.org/download/) — PHP dependency manager
+- Web server: Apache (XAMPP), Nginx, or PHP built-in server
 
-## Setup
-1. Install dependencies: `composer install`
-2. Copy `config.example.php` to `config.php` and update MongoDB settings
-3. Ensure MongoDB is running on `localhost:27017` (or configure in `config.php`)
-4. Access `index.php` from your web server
+## Quick Start
 
-## Current Features
-- User registration and authentication
-- Income/salary tracking
-- Expense management (Products, Services, Taxes)
-- Savings goals
-- Interactive dashboards and charts
-- Detailed insights and analytics
-- Activity logging
+1. **Clone or download** this repository into your web server's document root (e.g. `htdocs/` for XAMPP).
 
-## Implementation Plan
+2. **Install PHP dependencies:**
+   ```bash
+   cd FlexStart/NiceAdmin
+   composer install
+   ```
 
-### ~~Feature 1: Dashboard Card — Show Rest + Percentage~~ DONE
-**File:** `dashboard.php`
-- ~~Display **rest** (rest_du_cheque_final) as the primary stat on the first dashboard card~~
-- ~~Show percentage below: `(rest / salary) * 100%`~~
-- ~~Savings card stays as-is~~
+3. **Ensure MongoDB is running** on `localhost:27017`. The app will create a database named `flouss` automatically.
 
-### ~~Feature 2: Fix "Receive Salary" Logic~~ DONE
-**File:** `php/input.php` — `input_receive_salary()`
-- ~~Read salary from the **last budget record** instead of from POST~~
-- ~~New record: `salaire = last_salaire`, `rest = salaire`, `epargne = old_epargne + old_rest`~~
-- ~~Edge case: no previous record → show error, don't insert~~
+   To customize the MongoDB connection, copy `config.example.php` to `config.php` (one level above `NiceAdmin/`) and edit the values.
 
-### ~~Feature 3: Combine Declarations into Single Page (Accordion)~~ DONE
-**New file:** `declarations.php`
-**Remove:** `budget_input.php`, `b_salsaire_input.php`, `b_epargne_input.php`
-Three accordion sections:
-1. ~~**Budget Setup** — Salary + Rest + Savings initial setup~~
-2. ~~**Income Declaration** — New salary entry + Receive Salary~~
-3. ~~**Savings Declaration** — Savings entry with "Is this added value?" toggle~~
+4. **Migrate existing plaintext passwords** (only needed if upgrading from an older version):
+   ```bash
+   cd NiceAdmin
+   php scripts/migrate_passwords.php
+   ```
 
-### ~~Feature 4: Spending Question on Both Salary & Receive~~ DONE
-**File:** `declarations.php` + `b_salsaire_input_done.php`
-- ~~Radio: "Did you spend some of this salary?" → Yes / No~~
-- ~~Shown for **both** regular salary submit **and** Receive Salary~~
-- ~~If Yes → show `reste` input; deduct spent amount from rest~~
-- ~~Edge case: spent > salary → clamp to 0, warn in log~~
+5. **Access the app** at `http://localhost/FlexStart/index.php` (or wherever you placed it).
 
-### ~~Feature 5: Expense Quick Entry~~ DONE
-**File:** `depenses_add.php`
-Two tabs:
-- ~~**Tab A — Manual:** Auto-fills inputs with last entered expense; includes Reset button~~
-- ~~**Tab B — Quick:** Dropdown listing past expense names; selecting auto-fills all fields~~
-- ~~Edge case: no history → show "No previous expenses" placeholder~~
+## First Use
 
-### ~~Feature 6: Sidebar & Navigation Updates~~ DONE
-**File:** `php/partials/sidebar.php`
-- ~~Declaration submenu items point to `declarations.php`~~
-- ~~Update redirects in handler files~~
-- ~~Remove old file references~~
+1. Click **Get Started** / **Register** to create an account
+2. Log in and go to **Declaration → Declarations** to set up your first budget (salary + rest + savings)
+3. Add expenses via **Declaration → Expenses**
+4. View your dashboard, records, and insights from the sidebar
 
-## Implementation Order
-1. ~~Feature 1 (Dashboard card)~~
-2. ~~Feature 2 (Receive Salary fix)~~
-3. ~~Feature 4 (Spending question on both)~~
-4. ~~Feature 3 (Accordion declarations page)~~
-5. ~~Feature 5 (Expense quick entry)~~
-6. ~~Feature 6 (Sidebar + redirects)~~
+## Features
 
-## Data Model
-| Field | Type | Description |
-|---|---|---|
-| `salaire` | input | Salary amount |
-| `rest_du_cheque_final` | input | Remaining from last paycheck |
-| `epargne` | input | Savings amount |
-| **Budget** | **calculated** | `salaire + epargne` (sum of savings + rest) |
+- **Dashboard** — overview cards showing Rest (with % of salary), Savings, and Budget (Savings + Rest)
+- **Income Tracking** — regular salary entries and "Receive Salary" (rolls over rest + savings)
+- **Expense Management** — Products, Services, and Taxes with quick-entry mode
+- **Savings Goals** — declare savings with option for added value vs. regular deposit
+- **Interactive Charts** — budget vs. expenses breakdown, category distribution, trend analysis
+- **Insights & Analytics** — period-over-period comparison, savings rate, expense statistics
+- **Activity Logging** — full audit trail of income, expense, savings, and auth events
+- **Multi-Currency** — 40+ currencies supported, configurable per user
+- **Responsive UI** — Bootstrap 5 with collapsible sidebar, accordion forms, and modern tables
 
-## Credits
-- Built on NiceAdmin template by BootstrapMade
+## Tech Stack
+
+- **Backend:** PHP 8, MongoDB PHP driver (`mongodb/mongodb`)
+- **Frontend:** Bootstrap 5, ApexCharts, jQuery, Simple DataTables
+- **Template:** Based on NiceAdmin (BootstrapMade) — see License section
+
+## Project Structure
+
+```
+FlexStart/
+├── NiceAdmin/              # Application root
+│   ├── scripts/            # Utility scripts (password migration, etc.)
+│   ├── php/
+│   │   ├── components/     # Reusable UI components (Table, StatCard, etc.)
+│   │   ├── partials/       # Layout partials (header, sidebar, footer)
+│   │   ├── repositories/   # Data access layer (UserRepository, etc.)
+│   │   ├── services/       # Business logic (LogService, etc.)
+│   │   ├── account.php     # Login authentication
+│   │   ├── input.php       # Budget/income input logic
+│   │   ├── set_info.php    # Data write helpers
+│   │   └── get_info.php    # Data read helpers
+│   ├── *.php               # Page controllers
+│   ├── assets/             # Static assets (CSS, JS, images, vendor libs)
+│   └── vendor/             # Composer dependencies (generated)
+├── config.php              # MongoDB configuration (optional, uses defaults)
+├── config.example.php      # Configuration template
+├── index.php               # Landing page
+└── Readme.md               # This file
+```
+
+## License
+
+This project uses the **NiceAdmin** template by BootstrapMade. The template files retain their original license terms. If you intend to redistribute or sell this application, you must purchase a license from [BootstrapMade](https://bootstrapmade.com/niceadmin-bootstrap-admin-html-template/).
+
+All original application code and modifications are provided for personal/educational use. No warranty is expressed or implied.
+
+---
+
+*FLouss++ — because your money deserves a ++ too.*

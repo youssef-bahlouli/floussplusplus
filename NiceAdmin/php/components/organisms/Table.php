@@ -24,8 +24,17 @@ class Table extends Component
         }
         $html .= '</tr></thead><tbody>';
 
+        $rowAttr = $this->prop('rowAttr', null);
+
         foreach ($rows as $idx => $row) {
-            $html .= '<tr>';
+            $attrs = '';
+            if (is_callable($rowAttr)) {
+                $map = $rowAttr($row, $idx);
+                foreach ($map as $k => $v) {
+                    $attrs .= ' ' . $k . '="' . $this->esc($v) . '"';
+                }
+            }
+            $html .= '<tr' . $attrs . '>';
             foreach ($columns as $col) {
                 $key = is_string($col) ? $col : ($col['key'] ?? '');
                 $value = $row[$key] ?? '';

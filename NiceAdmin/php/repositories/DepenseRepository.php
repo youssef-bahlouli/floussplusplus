@@ -60,7 +60,7 @@ class DepenseRepository extends BaseRepository
     public function getTopByTotalCost($username, $limit = 10)
     {
         return $this->collection->aggregate([
-            ['$match' => ['username' => $username]],
+            ['$match' => ['username' => $username, 'nom' => ['$ne' => 'begin']]],
             ['$group' => [
                 '_id' => '$nom',
                 'total' => ['$sum' => ['$multiply' => ['$prix', '$quantite']]]

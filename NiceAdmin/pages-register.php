@@ -29,7 +29,6 @@
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
 
-  <!-- NiceAdmin Template by BootstrapMade -->
 </head>
 
 <body>
@@ -75,6 +74,7 @@
                 session_start();
                 $_SESSION["username"] = $username;
                 $_SESSION["user"] = $username;
+                $_SESSION['currency'] = 'MAD';
                 
                 $connexion->budgets->insertOne([
                     'username' => $username,
@@ -92,12 +92,8 @@
                     'ddate' => $date_payment,
                     'type' => 'services'
                 ]);
-                log_action($username, 'register', "$first_name $last_name registered");
+                log_action($username, 'register', "$first_name $last_name registered", 'auth');
                 ?>
-              </div>
-
-              <div class="credits">
-                <a href="https://bootstrapmade.com/">NiceAdmin</a>
               </div>
 
             </div>

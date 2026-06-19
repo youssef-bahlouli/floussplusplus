@@ -36,3 +36,16 @@ function ui_card(string $title, string $content, string $class = ''): string { r
 function ui_table(array $columns, array $rows, array $renderers = []): string { return new Table(['columns' => $columns, 'rows' => $rows, 'renderers' => $renderers]); }
 function ui_statsgrid(array $props = []): string { return new DashboardStatsGrid($props); }
 function ui_activitylog(array $logs, string $title = 'News & Updates'): string { return new ActivityLog(['logs' => $logs, 'title' => $title]); }
+
+function currency_symbol(): string {
+    if (!isset($_SESSION['currency'])) {
+        require_once __DIR__ . '/../repositories/UserRepository.php';
+        $user = (new UserRepository())->findByUsername($_SESSION['username'] ?? '');
+        $_SESSION['currency'] = $user['currency'] ?? 'MAD';
+    }
+    return $_SESSION['currency'];
+}
+
+function format_money(float $amount, int $decimals = 2): string {
+    return number_format($amount, $decimals) . ' ' . currency_symbol();
+}

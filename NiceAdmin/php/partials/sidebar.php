@@ -14,6 +14,12 @@
     <span>Insights</span>
     </a>
   </li>
+  <li class="nav-item">
+    <a class="nav-link collapsed" href="user_info.php">
+      <i class="bi bi-person"></i>
+      <span>My Info</span>
+    </a>
+  </li>
 
   <li class="nav-item">
     <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">

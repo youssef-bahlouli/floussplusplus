@@ -1,15 +1,32 @@
 <?php
 require_once __DIR__ . '/../database_connection.php';
 
-function log_action($username, $action, $details = '')
+function log_action($username, $action, $details = '', $type = null)
 {
     $db = get_con_var();
-    $db->logs->insertOne([
+    $doc = [
         'username' => $username,
         'action' => $action,
         'details' => $details,
         'created_at' => new MongoDB\BSON\UTCDateTime()
-    ]);
+    ];
+    if ($type !== null) {
+        $doc['type'] = $type;
+    }
+    $db->logs->insertOne($doc);
+}
+
+function get_logs_by_type($username, $type, $limit = 0)
+{
+    $db = get_con_var();
+    $opts = [
+        'sort' => ['_id' => -1]
+    ];
+    if ($limit > 0) $opts['limit'] = $limit;
+    return $db->logs->find(
+        ['username' => $username, 'type' => $type],
+        $opts
+    );
 }
 
 function get_logs($username, $limit = 5)

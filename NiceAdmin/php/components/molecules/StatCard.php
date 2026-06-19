@@ -9,6 +9,7 @@ class StatCard extends Component
         $value = $this->prop('value', 0);
         $pct = $this->prop('pct', null);
         $sublabel = $this->prop('sublabel', '');
+        $unit = $this->prop('unit', currency_symbol());
 
         $html = '<div class="col-xxl-4 col-md-6">';
         $html .= '<div class="card info-card ' . $this->esc($color) . '-card">';
@@ -19,7 +20,7 @@ class StatCard extends Component
         $html .= '<i class="bi ' . $this->esc($icon) . '"></i>';
         $html .= '</div>';
         $html .= '<div class="ps-3">';
-        $html .= '<h6>' . $this->esc((string)$value) . ' MAD</h6>';
+        $html .= '<h6>' . $this->esc((string)$value) . ' ' . $this->esc($unit) . '</h6>';
 
         if ($pct !== null) {
             $html .= sprintf(

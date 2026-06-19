@@ -62,7 +62,7 @@
                       'rows' => $rows,
                       'renderers' => [
                         '_idx' => fn($v, $row, $idx) => $idx + 1,
-                        'prix' => fn($v) => number_format((float)$v, 2) . ' MAD',
+                        'prix' => fn($v) => format_money((float)$v),
                         'quantite' => fn($v) => '<span class="badge bg-primary">' . (int)$v . '</span>',
                       ],
                     ]);

@@ -32,7 +32,6 @@
 
   <!-- =======================================================
   * FLouss++ - Personal Budget Management Application
-  * Built on FlexStart by BootstrapMade
   ======================================================== -->
 </head>
 

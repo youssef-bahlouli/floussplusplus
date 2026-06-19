@@ -8,7 +8,8 @@ function log_in($connexion,$username,$password)
         if(!password_verify($password, $user['passwrd'])) return 'Incorrect password';
         session_regenerate_id(true);
         $_SESSION['username'] = $username;
-        log_action($username, 'login', 'Login successful');
+        $_SESSION['currency'] = $user['currency'] ?? 'MAD';
+        log_action($username, 'login', 'Login successful', 'auth');
         return true;
     }
 ?>
