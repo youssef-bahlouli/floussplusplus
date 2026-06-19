@@ -14,6 +14,7 @@ A self-hosted web application for tracking income, expenses, and savings with in
 1. **Clone or download** this repository into your web server's document root (e.g. `htdocs/` for XAMPP).
 
 2. **Install PHP dependencies:**
+
    ```bash
    cd FlexStart/NiceAdmin
    composer install
@@ -24,6 +25,7 @@ A self-hosted web application for tracking income, expenses, and savings with in
    To customize the MongoDB connection, copy `config.example.php` to `config.php` (one level above `NiceAdmin/`) and edit the values.
 
 4. **Migrate existing plaintext passwords** (only needed if upgrading from an older version):
+
    ```bash
    cd NiceAdmin
    php scripts/migrate_passwords.php
@@ -45,7 +47,7 @@ A self-hosted web application for tracking income, expenses, and savings with in
 - **Expense Management** — Products, Services, and Taxes with quick-entry mode
 - **Savings Goals** — declare savings with option for added value vs. regular deposit
 - **Interactive Charts** — budget vs. expenses breakdown, category distribution, trend analysis
-- **Insights & Analytics** — period-over-period comparison, savings rate, expense statistics
+- **Insights & Analytics** — All tab (per-paycheck net result, expense trend, budget report, top expenses) and Advanced tab (period-over-period breakdown with AJAX switching)
 - **Activity Logging** — full audit trail of income, expense, savings, and auth events
 - **Multi-Currency** — 40+ currencies supported, configurable per user
 - **Responsive UI** — Bootstrap 5 with collapsible sidebar, accordion forms, and modern tables
@@ -80,12 +82,6 @@ FlexStart/
 └── Readme.md               # This file
 ```
 
-## License
-
-This project uses the **NiceAdmin** template by BootstrapMade. The template files retain their original license terms. If you intend to redistribute or sell this application, you must purchase a license from [BootstrapMade](https://bootstrapmade.com/niceadmin-bootstrap-admin-html-template/).
-
-All original application code and modifications are provided for personal/educational use. No warranty is expressed or implied.
-
 ---
 
-*FLouss++ — because your money deserves a ++ too.*
+_FLouss++ — because your money deserves a ++ too._
