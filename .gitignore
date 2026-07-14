@@ -13,7 +13,7 @@ Desktop.ini
 *.log
 
 # Composer dependencies
-vendor/
+/vendor/
 composer.lock
 
 # Environment config
