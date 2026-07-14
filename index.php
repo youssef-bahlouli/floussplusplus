@@ -318,7 +318,7 @@
                 <p>Set aside savings from each paycheck. Watch your savings grow over time with automatic rollover between pay periods.</p>
               </div>
 
-              <div class="tab-pane fade show" id="tab2">
+              <div class="tab-pane fade" id="tab2">
                 <p>Log every expense with detailed descriptions, categories, and quantities. Categorize spending into Products, Services, and Taxes for better analysis.</p>
                 <div class="d-flex align-items-center mb-2">
                   <i class="bi bi-check2"></i>
@@ -332,7 +332,7 @@
                 <p>Organize spending into Products, Services, and Taxes to understand where your money goes each month.</p>
               </div>
 
-              <div class="tab-pane fade show" id="tab3">
+              <div class="tab-pane fade" id="tab3">
                 <p>Gain deep insights into your financial habits with interactive charts and detailed statistics. Make data-driven decisions about your spending.</p>
                 <div class="d-flex align-items-center mb-2">
                   <i class="bi bi-check2"></i>
